@@ -15,18 +15,33 @@ os.environ['KAGGLE_KEY'] = config.KAGGLE_KEY #
 import kaggle
 kaggle.api.authenticate()
 
+def test_dir(dir):
+    if not(os.path.isdir(dir)):
+        os.mkdir(dir)
+    return os.path.isdir(dir)
+
 def download(url = 'http://vitibrasil.cnpuv.embrapa.br/download/ExpVinho.csv', layer='raw'):
     import requests, os
 
+    time.sleep(5)
+
     file_name = url.split('/')[-1:][0]
-    file_path = f'..\\..\\data\\{layer}\\{file_name}'
+
+    test_dir(f'data\\{layer}')
+    file_path = f'data\\{layer}\\{file_name}'
     if not(os.path.isfile(file_path)):
         try:
             r = requests.get(url, allow_redirects=True)
             with open(file_path, 'wb') as file:
                 file.write(r.content)
         except:
-            raise
+            time.sleep(5)
+            try:
+                r = requests.get(url, allow_redirects=True)
+                with open(file_path, 'wb') as file:
+                    file.write(r.content)
+            except:
+                raise
     return file_path, os.path.isfile(file_path)
 
 def chunker(seq, size):
@@ -47,29 +62,31 @@ def main():
         else:
             logger.info('-- Tech challenge data ok...')
 
-    # logger.info('World Bank data...')
-    # api = wbpy.IndicatorAPI()
-    # dict_countries = api.get_countries()
-    # list_of_countries = list(dict_countries.keys())
-    # for key in config.DICT_INDICATORS:
-    #     list_results = []
-    #     for countries in chunker(list_of_countries, 10):
-    #         time.sleep(5)
-    #         try:
-    #             df = api.get_dataset(config.DICT_INDICATORS[key], countries, date="1970:2021")
-    #             list_results.append(pd.DataFrame(df.as_dict()))
-    #         except:
-    #             print(f"error in {countries}")
-    #         pd.concat(list_results).to_csv(f"..\\..\\data\\raw\\wbpy\\{key}.csv")
-    # logger.info('-- World Bank data ok...')
+    logger.info('World Bank data...')
+    test_dir('data\\raw\\wbpy')
+    api = wbpy.IndicatorAPI()
+    dict_countries = api.get_countries()
+    list_of_countries = list(dict_countries.keys())
+    for key in config.DICT_INDICATORS:
+        list_results = []
+        for countries in chunker(list_of_countries, 10):
+            time.sleep(5)
+            try:
+                df = api.get_dataset(config.DICT_INDICATORS[key], countries, date="1970:2021")
+                list_results.append(pd.DataFrame(df.as_dict()))
+            except:
+                print(f"error in {countries}")
+            pd.concat(list_results).to_csv(f"data\\raw\\wbpy\\{key}.csv")
+    logger.info('-- World Bank data ok...')
 
-    # logger.info('Kaggle data...')
-    # # https://www.kaggle.com/datasets/sevgisarac/temperature-change
-    # kaggle.api.dataset_download_files('sevgisarac/temperature-change', path='..\\..\\data\\raw\\temp_change', unzip=True)
-    # # https://www.kaggle.com/datasets/noaa/noaa-global-historical-climatology-network-daily
-    # kaggle.api.dataset_download_files('noaa/noaa-global-historical-climatology-network-daily', path='..\\..\\data\\raw\\noaa_global', unzip=True)
-    # logger.info('-- Kaggle data ok...')
-    # logger.info('Finished raw data!')
+    logger.info('Kaggle data...')
+    test_dir('data\\raw\\temp_change')
+    # https://www.kaggle.com/datasets/sevgisarac/temperature-change
+    kaggle.api.dataset_download_files('sevgisarac/temperature-change', path='data\\raw\\temp_change', unzip=True)
+    # https://www.kaggle.com/datasets/noaa/noaa-global-historical-climatology-network-daily
+    kaggle.api.dataset_download_files('noaa/noaa-global-historical-climatology-network-daily', path='data\\raw\\noaa_global', unzip=True)
+    logger.info('-- Kaggle data ok...')
+    logger.info('Finished raw data!')
 
 
 
