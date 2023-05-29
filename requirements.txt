@@ -1,9 +1,6 @@
-# local package
--e git+ssh://git@github.com/pehls/gp27_techchallenge.git@3f55b858713336ac3c22638f0bc63634b73e3a34#egg=src
-
-# external requirements
 alabaster==0.7.13
 asttokens==2.2.1
+attrs==23.1.0
 Babel==2.12.1
 backcall==0.2.0
 certifi==2023.5.7
@@ -11,30 +8,39 @@ charset-normalizer==3.1.0
 click==8.1.3
 colorama==0.4.6
 comm==0.1.3
+contourpy==1.0.7
 coverage==7.2.6
+cycler==0.11.0
 debugpy==1.6.7
 decorator==5.1.1
 docutils==0.20.1
 executing==1.2.0
+fastjsonschema==2.17.1
 flake8==6.0.0
+fonttools==4.39.4
 idna==3.4
 imagesize==1.4.1
 ipykernel==6.23.1
 ipython==8.13.2
 jedi==0.18.2
 Jinja2==3.1.2
+jsonschema==4.17.3
 jupyter_client==8.2.0
 jupyter_core==5.3.0
 kaggle==1.5.13
+kiwisolver==1.4.4
 MarkupSafe==2.1.2
+matplotlib==3.7.1
 matplotlib-inline==0.1.6
 mccabe==0.7.0
+nbformat==5.8.0
 nest-asyncio==1.5.6
 numpy==1.24.3
 packaging==23.1
 pandas==2.0.1
 parso==0.8.3
 pickleshare==0.7.5
+Pillow==9.5.0
 platformdirs==3.5.1
 plotly==5.14.1
 prompt-toolkit==3.0.38
@@ -44,6 +50,8 @@ pycodestyle==2.10.0
 pycountry==22.3.5
 pyflakes==3.0.1
 Pygments==2.15.1
+pyparsing==3.0.9
+pyrsistent==0.19.3
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 python-slugify==8.0.1
@@ -60,6 +68,7 @@ sphinxcontrib-htmlhelp==2.0.1
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
+-e git+ssh://git@github.com/pehls/gp27_techchallenge.git@3f9791006917c900a642eac1215d27d866177537#egg=src
 stack-data==0.6.2
 tenacity==8.2.2
 text-unidecode==1.3

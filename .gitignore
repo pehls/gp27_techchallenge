@@ -1,3 +1,6 @@
+# keep
+!data\raw\noaa_global\ghcnd-stations.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
