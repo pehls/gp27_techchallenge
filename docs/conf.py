@@ -38,7 +38,7 @@ source_suffix = '.html'
 # source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = 'md'
 
 # General information about the project.
 project = u'gp27_techchallenge'
