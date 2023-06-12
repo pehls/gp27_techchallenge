@@ -249,6 +249,29 @@ def process_noaa_global(logger):
 
     logger.info('-- Finished NOAA global data...')
 
+def process_wbpy(logger):
+    logger.info('WBpy data...')
+
+    import os, glob
+    import pandas as pd
+
+    base_path = 'data\\raw\\wbpy\\'
+    dest_path = 'data\\processed\\wbpy\\'
+    test_dir(dest_path)
+
+    logger.info('Processing raw > processed...')
+    def read_csv(args):
+        df = pd.read_csv(args, sep=',', decimal='.')
+        df['metric'] = args.split('\\')[-1].split('.')[0]
+        return df
+
+    df_wbpy = pd.concat(map(read_csv, glob.glob(base_path+'*.csv'))).rename(columns={'Unnamed: 0':'year'})
+    df_wbpy = df_wbpy.melt(id_vars=['year','metric']).rename(columns={'variable':'country'})
+    df_wbpy.to_csv(dest_path+'wbpy.csv', index=False, sep=';', decimal=',')
+
+    logger.info('-- Finished wbpy data...')
+
+
 def main():
     """ Runs data processing scripts to process raw data into interim (../interim)  and from interim > processed
     """
@@ -259,6 +282,8 @@ def main():
     process_temperature_change(logger)
 
     process_noaa_global(logger)
+
+    process_wbpy(logger)
 
 
 
