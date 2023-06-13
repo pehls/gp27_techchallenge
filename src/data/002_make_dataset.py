@@ -19,7 +19,7 @@ kaggle.api.authenticate()
 
 def test_dir(dir):
     if not(os.path.isdir(dir)):
-        os.mkdir(dir)
+        os.makedirs(dir)
     return os.path.isdir(dir)
 
 def chunker(seq, size):
