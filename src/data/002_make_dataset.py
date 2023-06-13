@@ -271,6 +271,18 @@ def process_wbpy(logger):
 
     logger.info('-- Finished wbpy data...')
 
+def finalize_process(logger):
+    logger.info('Finalizing process, deleting raw data...')
+    import os
+    for root, dirs, files in os.walk('data\\raw', topdown=False):
+        for name in files:
+            if not ('ghcnd-stations.txt' in name):
+                os.remove(os.path.join(root, name))
+        for name in dirs:
+            try:
+                os.rmdir(os.path.join(root, name))
+            except:
+                pass
 
 def main():
     """ Runs data processing scripts to process raw data into interim (../interim)  and from interim > processed
@@ -285,6 +297,7 @@ def main():
 
     process_wbpy(logger)
 
+    finalize_process(logger)
 
 
 
