@@ -18,7 +18,7 @@ with st.sidebar.expander("Selecionar time frame"):
     predictions_time_frame = st.slider(
         "Para qual intervalo de anos quero analisar?",
         value=[1970,2023],
-        step=1)
+        step=1, min_value=1970, max_value=2023)
     
 st.write("""
 # Tech Challenge - vinhos
@@ -37,11 +37,49 @@ df_vinhos = pd.read_csv(r'..\\data\\processed\\tech_challenge\\df_vinhos.csv', s
 df_temperature_change_data = pd.read_csv(r'..\\data\\processed\\temp_change\\temperature_change_Data.csv', sep=';', decimal=',')
 df_wbpy = pd.read_csv(r'..\\data\\processed\\wbpy\\wbpy.csv', sep=';', decimal=',')
 
-st.plotly_chart(
-   generate_graphs._metricas_noaa(df_noaa_global,'PRCP')
-   , use_container_width=True)
+# Layout do aplicativo
+tab_precipitacao, tab_temp_media, tab_temp_min, tab_temp_max = st.tabs(["Precipitação","Temperatura Média", "Temperatura Mínima", "Temperatura Máxima"])
 
+with tab_precipitacao:
+    st.plotly_chart(
+    generate_graphs._metricas_noaa(df_noaa_global,'PRCP')
+    , use_container_width=True)
 
-st.plotly_chart(
-   generate_graphs._density_noaa(df_noaa_global,'PRCP')
-   , use_container_width=True)
+    st.divider() # ------------------------------------------------------
+
+    st.plotly_chart(
+    generate_graphs._density_noaa(df_noaa_global,'PRCP')
+    , use_container_width=True)
+
+with tab_temp_media:
+    st.plotly_chart(
+    generate_graphs._metricas_noaa(df_noaa_global,'TAVG')
+    , use_container_width=True)
+
+    st.divider() # ------------------------------------------------------
+
+    st.plotly_chart(
+    generate_graphs._density_noaa(df_noaa_global,'TAVG')
+    , use_container_width=True)
+
+with tab_temp_min:
+    st.plotly_chart(
+    generate_graphs._metricas_noaa(df_noaa_global,'TMIN')
+    , use_container_width=True)
+
+    st.divider() # ------------------------------------------------------
+
+    st.plotly_chart(
+    generate_graphs._density_noaa(df_noaa_global,'TMIN')
+    , use_container_width=True)
+
+with tab_temp_max:
+    st.plotly_chart(
+    generate_graphs._metricas_noaa(df_noaa_global,'TMAX')
+    , use_container_width=True)
+
+    st.divider() # ------------------------------------------------------
+
+    st.plotly_chart(
+    generate_graphs._density_noaa(df_noaa_global,'TMAX')
+    , use_container_width=True)
