@@ -1,6 +1,8 @@
 # keep
 !data\raw\noaa_global\ghcnd-stations.txt
 !data\processed\inmet\rs.csv
+!data\processed\dict_latlong.pkl
+!data\processed\dict_translates.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -28,6 +30,7 @@ var/
 *.egg
 venv
 inmet_dados_hist
+*.zip
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
