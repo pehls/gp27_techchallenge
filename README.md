@@ -51,6 +51,12 @@ Project Organization
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
+Decisions around the process
+------------
+- We are using Country Code (in english) as a key to manipulate all the data;
+- After recover and explored, the NOAA data, specifically Temperature (TMIN, TMAX, TAVG), was in Farenheidt; So, we apply an formula to generate Celsius Degrees;
+- After that, we have temperatures like -5000ºC, or more than 100ºC; when the temperature was > 57ªC (highest temperature, found in Death Valley, CA, USA) and < -90 (lowest temperature, in Antarctica), we put a nan in it, and imput the mean of the value in this place, after;
+- We've filtered this database with the lowest year as 1970, because of the lowest year in wine data;
 
 --------
 
