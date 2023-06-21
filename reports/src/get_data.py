@@ -1,7 +1,8 @@
 import pandas as pd
+from pathlib import Path
 
-_local_base_path = "..\\data"
-base_path = 'data'
+bundle_dir = Path(__file__).parent
+BASE_PATH = Path.cwd() / bundle_dir
 
 def DF_EXPORTACAO(years = 15):
     df = pd.read_csv(rf'{base_path}\\interim\\tech_challenge\\exportacao_vinhos.csv', 
@@ -40,7 +41,12 @@ def DF_NOAA_GLOBAL(years=15):
     return df
 
 import os
-raise Exception(os.listdir(r'\data\processed'))
+str = f"""
+cwd={os.getcwd()}\n
+base_path={BASE_PATH}\n
+list={os.listdir(BASE_PATH / 'data/processed' )}
+"""
+raise Exception(str)
 
 DF_VINHOS = pd.read_csv(rf'{base_path}\processed\tech_challenge\df_vinhos.csv', sep=';', decimal=',')
 
