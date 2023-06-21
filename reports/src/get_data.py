@@ -43,7 +43,7 @@ import os
 str = f"""
 cwd={os.getcwd()}\n
 base_path={BASE_PATH}\n
-list={os.list(BASE_PATH)}
+list={os.listdir(BASE_PATH)}
 """
 raise Exception(str)
 
