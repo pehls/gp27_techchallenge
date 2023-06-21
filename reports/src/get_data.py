@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
-BASE_PATH = Path.cwd() / 'data'
+BASE_PATH = Path.cwd() / 'data/processed'
 
 def DF_EXPORTACAO(years = 15):
     df = pd.read_csv(rf'{base_path}\\interim\\tech_challenge\\exportacao_vinhos.csv', 
