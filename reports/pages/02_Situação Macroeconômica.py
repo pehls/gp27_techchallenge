@@ -34,7 +34,6 @@ with st.expander("Mais detalhes"):
 tab_credito_logistica, tab_logistica_pop, tab_top10_exportacoes = st.tabs(["Crédito e Abertura de Empresa","Logística e População", "Top 10 Exportações"])
 
 with tab_credito_logistica:
-    st.write(get_data.DF_WBPY(years_to_filter)['metric'].unique())
     st.plotly_chart(
         generate_graphs._credito_top10(get_data.DF_WBPY(years_to_filter))
         , use_container_width=True
