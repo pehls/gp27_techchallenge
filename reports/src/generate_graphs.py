@@ -26,7 +26,7 @@ def _metricas_noaa(df_noaa_global, stat):
     # hide axes
     fig.update_xaxes(visible=True, title='')
     fig.update_yaxes(visible=True,
-                    gridcolor='white',zeroline=True,
+                    gridcolor='black',zeroline=True,
                     showticklabels=True, title=''
                     )
 
@@ -59,7 +59,7 @@ def _metricas_noaa(df_noaa_global, stat):
     # strip down the rest of the plot
     fig.update_layout(
         showlegend=True,
-        plot_bgcolor="white",
+        plot_bgcolor="black",
         margin=dict(l=10,b=10,r=10)
     )
 
@@ -239,7 +239,7 @@ def _credito_top10(df):
                 template='plotly_dark')
 
     fig.update_yaxes(visible=True,
-                    gridcolor='white',zeroline=True,
+                    gridcolor='black',zeroline=True,
                     showticklabels=False, title='Crédito Setor Privado'
                     )
     # Set layout properties
@@ -258,7 +258,7 @@ def _register_business_top10(df):
                 template='plotly_dark')
 
     fig.update_yaxes(visible=True,
-                    gridcolor='white',zeroline=True,
+                    gridcolor='black',zeroline=True,
                     showticklabels=False, title='Nº de Procedimentos'
                     )
     # Set layout properties
@@ -282,7 +282,7 @@ def _crescimento_pop_top10(df):
                 template='plotly_dark')
 
     fig.update_yaxes(visible=True,
-                    gridcolor='white',zeroline=True,
+                    gridcolor='black',zeroline=True,
                     showticklabels=False, title='Crescimento Populacional'
                     )
     # Set layout properties
@@ -308,7 +308,7 @@ def _logistic_groups(df):
     fig.update_xaxes(visible=False)
                      
     fig.update_yaxes(visible=False,
-                    gridcolor='white',
+                    gridcolor='black',
                     zeroline=False, showticklabels=False,
                     )
     # Set layout properties
@@ -337,7 +337,7 @@ def _logistic_bests(df):
 
     # hide axes
     fig.update_yaxes(visible=True,
-                    gridcolor='white',zeroline=True,
+                    gridcolor='black',zeroline=True,
                     showticklabels=False, title=''
                     )
 
