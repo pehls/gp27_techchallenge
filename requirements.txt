@@ -74,7 +74,6 @@ python-dotenv==1.0.0
 python-slugify==8.0.1
 pytz==2023.3
 pytz-deprecation-shim==0.1.0.post0
-pywin32==306
 pyzmq==25.1.0
 requests==2.31.0
 rich==13.4.2
@@ -90,7 +89,6 @@ sphinxcontrib-htmlhelp==2.0.1
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
--e git+ssh://git@github.com/pehls/gp27_techchallenge.git@c8886f5ebe1692f06c6e28a5b7b313f407db9a9b#egg=src
 stack-data==0.6.2
 streamlit==1.23.1
 tenacity==8.2.2
