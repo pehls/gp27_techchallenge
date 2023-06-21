@@ -40,7 +40,7 @@ def DF_NOAA_GLOBAL(years=15):
     return df
 
 import os
-raise Exception(os.listdir(r'data\\processed'))
+raise Exception(os.listdir(r'data\processed'))
 
 DF_VINHOS = pd.read_csv(rf'{base_path}\processed\tech_challenge\df_vinhos.csv', sep=';', decimal=',')
 
