@@ -44,7 +44,7 @@ import os
 str = f"""
 cwd={os.getcwd()}\n
 base_path={BASE_PATH}\n
-list={os.listdir(BASE_PATH / 'data/processed' )}
+list={os.listdir(BASE_PATH / 'data' )}
 """
 raise Exception(str)
 
