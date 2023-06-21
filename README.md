@@ -67,6 +67,9 @@ Decisions around the process
 - After that, we have temperatures like -5000ºC, or more than 100ºC; when the temperature was > 57ªC (highest temperature, found in Death Valley, CA, USA) and < -90 (lowest temperature, in Antarctica), we put a nan in it, and imput the mean of the value in this place, after;
 - We've filtered this database with the lowest year as 1970, because it is the lowest year in wine data;
 
+Deployed in prod:
+------------
+- Can be acessed [here](https://gp27-techchallenge.streamlit.app/)
 --------
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
