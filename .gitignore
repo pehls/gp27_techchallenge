@@ -1,8 +1,7 @@
 # keep
 !data\raw\noaa_global\ghcnd-stations.txt
-!data\processed\inmet\rs.csv
-!data\processed\dict_latlong.pkl
-!data\processed\dict_translates.pkl
+!data\processed\*
+!data\interim\tech_challenge\exportacao_vinhos.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
