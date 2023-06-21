@@ -1,7 +1,10 @@
 import pandas as pd
 
+_local_base_path = "..\\data"
+base_path = 'data'
+
 def DF_EXPORTACAO(years = 15):
-    df = pd.read_csv(r'..\\data\\interim\\tech_challenge\\exportacao_vinhos.csv', 
+    df = pd.read_csv(rf'{base_path}\\interim\\tech_challenge\\exportacao_vinhos.csv', 
                                 sep=';', skiprows=1,
                                 names=['Country', 'Year', 'Quantity (L)', 'Sales (Dollars)'])
 
@@ -24,7 +27,7 @@ def DF_EXPORTACAO(years = 15):
 
 
 def DF_NOAA_GLOBAL(years=15):
-    df = pd.read_csv(r'..\\data\\processed\\noaa_global\\noaa_global_final.csv', sep=';', decimal=',')
+    df = pd.read_csv(rf'{base_path}\\processed\\noaa_global\\noaa_global_final.csv', sep=';', decimal=',')
 
     # Find the maximum year in the dataframe
     max_year = df['year'].max()
@@ -36,12 +39,12 @@ def DF_NOAA_GLOBAL(years=15):
     df = df[df['year'] >= min_year]
     return df
 
-DF_VINHOS = pd.read_csv(r'..\\data\\processed\\tech_challenge\\df_vinhos.csv', sep=';', decimal=',')
+DF_VINHOS = pd.read_csv(rf'{base_path}\\processed\\tech_challenge\\df_vinhos.csv', sep=';', decimal=',')
 
-DF_TEMP_CHANGE = pd.read_csv(r'..\\data\\processed\\temp_change\\temperature_change_Data.csv', sep=';', decimal=',')
+DF_TEMP_CHANGE = pd.read_csv(rf'{base_path}\\processed\\temp_change\\temperature_change_Data.csv', sep=';', decimal=',')
 
 def DF_WBPY(years=15):
-    df = pd.read_csv(r'..\\data\\processed\\wbpy\\wbpy.csv', sep=';', decimal=',')
+    df = pd.read_csv(rf'{base_path}\\processed\\wbpy\\wbpy.csv', sep=';', decimal=',')
 
     # Find the maximum year in the dataframe
     max_year = df['year'].max()
