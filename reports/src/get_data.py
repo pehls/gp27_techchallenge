@@ -39,6 +39,9 @@ def DF_NOAA_GLOBAL(years=15):
     df = df[df['year'] >= min_year]
     return df
 
+import os
+print(os.list())
+
 DF_VINHOS = pd.read_csv(rf'{base_path}\processed\tech_challenge\df_vinhos.csv', sep=';', decimal=',')
 
 DF_TEMP_CHANGE = pd.read_csv(rf'{base_path}\processed\temp_change\temperature_change_Data.csv', sep=';', decimal=',')
