@@ -69,7 +69,7 @@ def DF_RS(years=15):
     df = df[df['year'] >= min_year]
     return df
 
-def DF_PRECP_COMPARATIVE(df_clima_rs, df_noaa_global, stat='PRCP', thresold_filter = 3):
+def DF_PRECP_COMPARATIVE(df_clima_rs, df_noaa_global, stat='PRCP', thresold_filter = 3, years_to_filter=15):
     dict_y_transformation={
             'PRCP':('value_median','Mediana da Precipitação')
             , 'TAVG':('value_mean','Média da Temperatura')
@@ -78,9 +78,14 @@ def DF_PRECP_COMPARATIVE(df_clima_rs, df_noaa_global, stat='PRCP', thresold_filt
         }
     # Primeiro, recuperamos a variavel a ser analisada
     df_precp_global = df_noaa_global.loc[df_noaa_global['stat']==stat]
+    # vamos remover paises com menos de {espaco de tempo/3} pontos de dados
+    list_paises = (df_precp_global.dropna(axis=0).country_code.value_counts().reset_index())
+    list_paises.columns=['country_code','count']
+    list_paises = list(list_paises.query(f'count > {years_to_filter/3}').country_code)
     df_precp_global = df_precp_global[['year','country_code',dict_y_transformation[stat][0]]]
     df_precp_global = df_precp_global.loc[df_precp_global.year >= min(df_clima_rs.year)]
     df_precp_global = df_precp_global.loc[df_precp_global.year <= max(df_clima_rs.year)]
+    df_precp_global = df_precp_global.loc[df_precp_global.country_code.isin(list_paises)]
     df_clima_rs = df_clima_rs.rename(columns={stat:dict_y_transformation[stat][0]})
     df_clima_rs['country_code'] = 'BR-RS'
     # e criamos um dataframe com todos os dados
@@ -97,23 +102,23 @@ def DF_PRECP_COMPARATIVE(df_clima_rs, df_noaa_global, stat='PRCP', thresold_filt
     # 1 - calculamos o ape
     df_full['dif_perc_max'] = _mape(df_full[dict_y_transformation[stat][0]], _max_precip)
     # 2 - ranqueamos, para cada ano
-    df_full['rank_per_max_year'] = df_full.groupby('year')['dif_perc_max'].rank()
+    df_full['rank_per_max_year'] = df_full.groupby('year')['dif_perc_max'].rank(method="dense")
     # 3 - somamos os ranks, a menor soma vai ser o pais mais bem colocado
     final_rank_max = df_full.groupby(['country_code']).agg({'rank_per_max_year':'sum'}).reset_index()
     # 4 -e ranqueamos novamente para filtrar mais pra frente
-    final_rank_max['final_rank_max'] = final_rank_max['rank_per_max_year'].rank()
+    final_rank_max['final_rank_max'] = final_rank_max['rank_per_max_year'].rank(method="dense")
     df_full = df_full.drop(columns=['rank_per_max_year']).merge(final_rank_max.drop(columns=['rank_per_max_year']))
 
     df_full['dif_perc_min'] = _mape(df_full[dict_y_transformation[stat][0]], _min_precip)
-    df_full['rank_per_min_year'] = df_full.groupby('year')['dif_perc_min'].rank()
+    df_full['rank_per_min_year'] = df_full.groupby('year')['dif_perc_min'].rank(method="dense")
     final_rank_max = df_full.groupby(['country_code']).agg({'rank_per_min_year':'sum'}).reset_index()
-    final_rank_max['final_rank_min'] = final_rank_max['rank_per_min_year'].rank()
+    final_rank_max['final_rank_min'] = final_rank_max['rank_per_min_year'].rank(method="dense")
     df_full = df_full.drop(columns=['rank_per_min_year']).merge(final_rank_max.drop(columns=['rank_per_min_year']))
 
     df_full['dif_perc_mean'] = _mape(df_full[dict_y_transformation[stat][0]], _mean_precip)
-    df_full['rank_per_mean_year'] = df_full.groupby('year')['dif_perc_mean'].rank()
+    df_full['rank_per_mean_year'] = df_full.groupby('year')['dif_perc_mean'].rank(method="dense")
     final_rank_max = df_full.groupby(['country_code']).agg({'rank_per_mean_year':'sum'}).reset_index()
-    final_rank_max['final_rank_mean'] = final_rank_max['rank_per_mean_year'].rank()
+    final_rank_max['final_rank_mean'] = final_rank_max['rank_per_mean_year'].rank(method="dense")
     df_full = df_full.drop(columns=['rank_per_mean_year']).merge(final_rank_max.drop(columns=['rank_per_mean_year']))
 
     # finalmente, filtramos os 6 menores (o 1 sera sempre o proprio, esperamos)

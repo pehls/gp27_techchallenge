@@ -102,6 +102,7 @@ with tab_temp_media:
         , use_container_width=True)
 
 with tab_temp_min:
+    
     st.plotly_chart(
     generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
                   df_clima_rs=get_data.DF_RS(years_to_filter)
