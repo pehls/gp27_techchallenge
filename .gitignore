@@ -2,7 +2,7 @@
 !data\raw\noaa_global\ghcnd-stations.txt
 !data\processed\*
 !data\interim\tech_challenge\exportacao_vinhos.csv
-
+!data\processed\inmet\rs_final.csv
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

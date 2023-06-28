@@ -37,44 +37,132 @@ tab_precipitacao, tab_temp_media, tab_temp_min, tab_temp_max = st.tabs(["Precipi
 
 with tab_precipitacao:
     st.plotly_chart(
-    generate_graphs._metricas_noaa(get_data.DF_NOAA_GLOBAL(years_to_filter),'PRCP')
+    generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
+                  df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL()
+                , stat='PRCP', thresold_filter = 6
+            ),'PRCP')
     , use_container_width=True)
 
     st.divider() # ------------------------------------------------------
+    col1, col2 = st.columns([1,3])
+    with col1:
+        st.plotly_chart(
+        generate_graphs._density_clima_rs(
+            df_full=get_data.DF_PRECP_COMPARATIVE(
+                df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL()
+                , stat='PRCP'
+            )
+            , stat='PRCP'
+            )
+        , use_container_width=True)
 
-    st.plotly_chart(
-    generate_graphs._density_noaa(get_data.DF_NOAA_GLOBAL(years_to_filter),'PRCP')
-    , use_container_width=True)
+    with col2:
+        st.plotly_chart(
+        generate_graphs._density_noaa(
+            get_data.DF_PRECP_COMPARATIVE(
+                  df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL(years_to_filter)
+                , stat='PRCP', thresold_filter = 6
+            ),'PRCP')
+        , use_container_width=True)
 
 with tab_temp_media:
     st.plotly_chart(
-    generate_graphs._metricas_noaa(get_data.DF_NOAA_GLOBAL(years_to_filter),'TAVG')
+    generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
+                  df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL()
+                , stat='TAVG', thresold_filter = 6
+            ),'TAVG')
     , use_container_width=True)
 
     st.divider() # ------------------------------------------------------
+    col1, col2 = st.columns([1,3])
+    with col1:
+        st.plotly_chart(
+        generate_graphs._density_clima_rs(
+            df_full=get_data.DF_PRECP_COMPARATIVE(
+                df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL()
+                , stat='TAVG'
+            )
+            , stat='TAVG'
+            )
+        , use_container_width=True)
 
-    st.plotly_chart(
-    generate_graphs._density_noaa(get_data.DF_NOAA_GLOBAL(years_to_filter),'TAVG')
-    , use_container_width=True)
+    with col2:
+        st.plotly_chart(
+        generate_graphs._density_noaa(
+            get_data.DF_PRECP_COMPARATIVE(
+                  df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL(years_to_filter)
+                , stat='TAVG', thresold_filter = 6
+            ),'TAVG')
+        , use_container_width=True)
 
 with tab_temp_min:
     st.plotly_chart(
-    generate_graphs._metricas_noaa(get_data.DF_NOAA_GLOBAL(years_to_filter),'TMIN')
+    generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
+                  df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL()
+                , stat='TMIN', thresold_filter = 6
+            ),'TMIN')
     , use_container_width=True)
 
     st.divider() # ------------------------------------------------------
+    col1, col2 = st.columns([1,3])
+    with col1:
+        st.plotly_chart(
+        generate_graphs._density_clima_rs(
+            df_full=get_data.DF_PRECP_COMPARATIVE(
+                df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL()
+                , stat='TMIN'
+            )
+            , stat='TMIN'
+            )
+        , use_container_width=True)
 
-    st.plotly_chart(
-    generate_graphs._density_noaa(get_data.DF_NOAA_GLOBAL(years_to_filter),'TMIN')
-    , use_container_width=True)
+    with col2:
+        st.plotly_chart(
+        generate_graphs._density_noaa(
+            get_data.DF_PRECP_COMPARATIVE(
+                  df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL(years_to_filter)
+                , stat='TMIN', thresold_filter = 6
+            ),'TMIN')
+        , use_container_width=True)
 
 with tab_temp_max:
     st.plotly_chart(
-    generate_graphs._metricas_noaa(get_data.DF_NOAA_GLOBAL(years_to_filter),'TMAX')
+    generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
+                  df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL()
+                , stat='TMAX', thresold_filter = 6
+            ),'TMAX')
     , use_container_width=True)
 
     st.divider() # ------------------------------------------------------
+    col1, col2 = st.columns([1,3])
+    with col1:
+        st.plotly_chart(
+        generate_graphs._density_clima_rs(
+            df_full=get_data.DF_PRECP_COMPARATIVE(
+                df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL()
+                , stat='TMAX'
+            )
+            , stat='TMAX'
+            )
+        , use_container_width=True)
 
-    st.plotly_chart(
-    generate_graphs._density_noaa(get_data.DF_NOAA_GLOBAL(years_to_filter),'TMAX')
-    , use_container_width=True)
+    with col2:
+        st.plotly_chart(
+        generate_graphs._density_noaa(
+            get_data.DF_PRECP_COMPARATIVE(
+                  df_clima_rs=get_data.DF_RS(years_to_filter)
+                , df_noaa_global=get_data.DF_NOAA_GLOBAL(years_to_filter)
+                , stat='TMAX', thresold_filter = 6
+            ),'TMAX')
+        , use_container_width=True)

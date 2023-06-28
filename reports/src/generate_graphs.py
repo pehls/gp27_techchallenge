@@ -9,7 +9,7 @@ def _metricas_noaa(df_noaa_global, stat):
     com o dado de clima do rs, vou filtrar para apenas mostrar os mais semelhantes; a analisar como (colocar uma faixa de +5% a -5%? com correlação de pearson/dtw?)
     """
     dict_y_title={
-          'PRCP':('value_mean','Média da Precipitação')
+          'PRCP':('value_median','Mediana da Precipitação')
         , 'TAVG':('value_mean','Média da Temperatura')
         , 'TMAX':('value_max','Máxima da Temperatura')
         , 'TMIN':('value_min','Mínima da Temperatura')
@@ -20,7 +20,7 @@ def _metricas_noaa(df_noaa_global, stat):
     fig = px.line(
         df_noaa_global.loc[df_noaa_global['stat']==stat], 
         x='year', y=dict_y_title[stat][0], color='country_code'
-        , custom_data=['year', 'value_min','value_mean','value_median','value_max', 'country_code']
+        , custom_data=['year', dict_y_title[stat][0], 'country_code']
     )
 
     # hide axes
@@ -47,14 +47,14 @@ def _metricas_noaa(df_noaa_global, stat):
         hovermode='x unified',
     )
 
-    fig.update_traces(
-        hovertemplate="""
-        <b>Min.:</b> %{customdata[1]} 
-        <b>Med.:</b> %{customdata[2]} 
-        <b>Mediana:</b> %{customdata[3]} 
-        <b>Max.:</b> %{customdata[4]} 
-        """
-    )
+    # fig.update_traces(
+    #     hovertemplate="""
+    #     <b>Metr.:</b> %{customdata[1]} 
+    #     <b>Med.:</b> %{customdata[2]} 
+    #     <b>Mediana:</b> %{customdata[3]} 
+    #     <b>Max.:</b> %{customdata[4]} 
+    #     """
+    # )
 
     # strip down the rest of the plot
     fig.update_layout(
@@ -70,8 +70,9 @@ def _metricas_noaa(df_noaa_global, stat):
     return fig
 
 def _density_noaa(df_noaa_global, stat):
+    df_noaa_global = df_noaa_global.loc[df_noaa_global['country_code']!='BR-RS']
     dict_y_title={
-          'PRCP':('value_mean','Média da Precipitação')
+          'PRCP':('value_median','Mediana da Precipitação')
         , 'TAVG':('value_mean','Média da Temperatura')
         , 'TMAX':('value_max','Máxima da Temperatura')
         , 'TMIN':('value_min','Mínima da Temperatura')
@@ -353,5 +354,32 @@ def _logistic_bests(df):
         'text' : """<b>Faixa 4+</b>
         <sup>Melhores países por performance logística</sup>
         """
+    })
+    return fig
+
+def _density_clima_rs(df_full, stat):
+    dict_y_title={
+          'PRCP':('value_median','Mediana da Precipitação')
+        , 'TAVG':('value_mean','Média da Temperatura')
+        , 'TMAX':('value_max','Máxima da Temperatura')
+        , 'TMIN':('value_min','Mínima da Temperatura')
+    }
+
+    fig = px.violin(
+        df_full.loc[df_full['country_code']=='BR-RS'], 
+        x='country_code', y=dict_y_title[stat][0], color='country_code'
+        , hover_data=['year']
+        , box=True
+        , points='all'
+    )
+
+    # hide axes
+    fig.update_xaxes(visible=True, title='')
+    fig.update_yaxes(visible=True, title=''
+                    )
+    
+    fig.update_layout(title={
+        'text' : f"""<b>{dict_y_title[stat][1]}</b> 
+        <br><sup>Distribuição nos anos</sup>"""
     })
     return fig
