@@ -82,7 +82,7 @@ def main():
     logger.info('Kaggle data...')
     test_dir('data\\raw\\temp_change')
     # https://www.kaggle.com/datasets/sevgisarac/temperature-change
-    kaggle.api.dataset_download_files('sevgisarac/temperature-change', path='data\\raw\\temp_change', unzip=True)
+    # kaggle.api.dataset_download_files('sevgisarac/temperature-change', path='data\\raw\\temp_change', unzip=True)
     # https://www.kaggle.com/datasets/noaa/noaa-global-historical-climatology-network-daily
     kaggle.api.dataset_download_files('noaa/noaa-global-historical-climatology-network-daily', path='data\\raw\\noaa_global', unzip=True)
     logger.info('-- Kaggle data ok...')

@@ -291,7 +291,7 @@ def main():
 
     process_tech_challenge(logger)
 
-    process_temperature_change(logger)
+    # process_temperature_change(logger)
 
     process_noaa_global(logger)
 
