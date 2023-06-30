@@ -191,7 +191,7 @@ with tab_temp_max:
     generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
                   df_clima_rs=get_data.DF_RS(years_to_filter)
                 , df_noaa_global=get_data.DF_NOAA_GLOBAL()
-                , stat='TMAX', thresold_filter = 6
+                , stat='TMAX', thresold_filter = 4
             ),'TMAX')
     , use_container_width=True)
 
@@ -215,6 +215,6 @@ with tab_temp_max:
             get_data.DF_PRECP_COMPARATIVE(
                   df_clima_rs=get_data.DF_RS(years_to_filter)
                 , df_noaa_global=get_data.DF_NOAA_GLOBAL(years_to_filter)
-                , stat='TMAX', thresold_filter = 6
+                , stat='TMAX', thresold_filter = 4
             ),'TMAX')
         , use_container_width=True)
