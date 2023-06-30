@@ -139,6 +139,13 @@ with tab_temp_media:
 
 with tab_temp_min:
     
+    with st.expander("Mais detalhes"):
+        st.info("""
+            Chegando nas temperaturas mínimas, vemos países da América do sul, como Bolívia, Colômbia, Peru e Equador, dominando nas semelhanças; Muito embora, ao analisar as distribuições, Equador e Colômbia tem seus valores em faixas mais próximas de 0, uma faixa mais fácil de ser encontrada no RS. 
+            Os demais países aparecem aqui, provavelmente, por suas temperaturas no decorrer dos anos terem mais se aproximado dos valores mínimos, na faixa entre 0 e 8ºC, mas não possuem uma distribuição tão parecida com o RS.
+        """,
+        icon="ℹ️")
+
     st.plotly_chart(
     generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
                   df_clima_rs=get_data.DF_RS(years_to_filter)
@@ -172,6 +179,14 @@ with tab_temp_min:
         , use_container_width=True)
 
 with tab_temp_max:
+
+    with st.expander("Mais detalhes"):
+        st.info("""
+            Chegando nas temperaturas mínimas, vemos países da América do sul, como Bolívia, Colômbia, Peru e Equador, dominando nas semelhanças; Muito embora, ao analisar as distribuições, Equador e Colômbia tem seus valores em faixas mais próximas de 0, uma faixa mais fácil de ser encontrada no RS. 
+            Os demais países aparecem aqui, provavelmente, por suas temperaturas no decorrer dos anos terem mais se aproximado dos valores mínimos, na faixa entre 0 e 8ºC, mas não possuem uma distribuição tão parecida com o RS.
+        """,
+        icon="ℹ️")
+
     st.plotly_chart(
     generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
                   df_clima_rs=get_data.DF_RS(years_to_filter)
