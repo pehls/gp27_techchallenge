@@ -3,24 +3,19 @@ import plotly.express as px
 import plotly.graph_objs as go
 import plotly.figure_factory as ff
 from plotly.subplots import make_subplots
+import config
 
 def _metricas_noaa(df_noaa_global, stat):
     """
     com o dado de clima do rs, vou filtrar para apenas mostrar os mais semelhantes; a analisar como (colocar uma faixa de +5% a -5%? com correlação de pearson/dtw?)
     """
-    dict_y_title={
-          'PRCP':('value_median','Mediana da Precipitação')
-        , 'TAVG':('value_mean','Média da Temperatura')
-        , 'TMAX':('value_max','Máxima da Temperatura')
-        , 'TMIN':('value_min','Mínima da Temperatura')
-    }
-
+    
     fig = go.Figure()
 
     fig = px.line(
         df_noaa_global.loc[df_noaa_global['stat']==stat], 
-        x='year', y=dict_y_title[stat][0], color='country_code'
-        , custom_data=['year', dict_y_title[stat][0], 'country_code']
+        x='year', y=config.DICT_Y[stat][0], color='country_code'
+        , custom_data=['year', config.DICT_Y[stat][0], 'country_code']
     )
 
     # hide axes
@@ -64,23 +59,16 @@ def _metricas_noaa(df_noaa_global, stat):
     )
 
     fig.update_layout(title={
-        'text' : f"""<b>{dict_y_title[stat][1]}</b> 
+        'text' : f"""<b>{config.DICT_Y[stat][1]}</b> 
         <br><sup>Comparativo nos anos</sup>"""
     })
     return fig
 
 def _density_noaa(df_noaa_global, stat):
     df_noaa_global = df_noaa_global.loc[df_noaa_global['country_code']!='BR-RS']
-    dict_y_title={
-          'PRCP':('value_median','Mediana da Precipitação')
-        , 'TAVG':('value_mean','Média da Temperatura')
-        , 'TMAX':('value_max','Máxima da Temperatura')
-        , 'TMIN':('value_min','Mínima da Temperatura')
-    }
-
     fig = px.violin(
         df_noaa_global.loc[df_noaa_global['stat']==stat], 
-        x='country_code', y=dict_y_title[stat][0], color='country_code'
+        x='country_code', y=config.DICT_Y[stat][0], color='country_code'
         , hover_data=['year']
         , box=True
         , points='all'
@@ -92,7 +80,7 @@ def _density_noaa(df_noaa_global, stat):
                     )
     
     fig.update_layout(title={
-        'text' : f"""<b>{dict_y_title[stat][1]}</b> 
+        'text' : f"""<b>{config.DICT_Y[stat][1]}</b> 
         <br><sup>Distribuição nos anos</sup>"""
     })
     return fig
@@ -358,16 +346,10 @@ def _logistic_bests(df):
     return fig
 
 def _density_clima_rs(df_full, stat):
-    dict_y_title={
-          'PRCP':('value_median','Mediana da Precipitação')
-        , 'TAVG':('value_mean','Média da Temperatura')
-        , 'TMAX':('value_max','Máxima da Temperatura')
-        , 'TMIN':('value_min','Mínima da Temperatura')
-    }
 
     fig = px.violin(
         df_full.loc[df_full['country_code']=='BR-RS'], 
-        x='country_code', y=dict_y_title[stat][0], color='country_code'
+        x='country_code', y=config.DICT_Y[stat][0], color='country_code'
         , hover_data=['year']
         , box=True
         , points='all'
@@ -379,7 +361,7 @@ def _density_clima_rs(df_full, stat):
                     )
     
     fig.update_layout(title={
-        'text' : f"""<b>{dict_y_title[stat][1]}</b> 
+        'text' : f"""<b>{config.DICT_Y[stat][1]}</b> 
         <br><sup>Distribuição nos anos</sup>"""
     })
     return fig
