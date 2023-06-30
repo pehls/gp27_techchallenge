@@ -4,7 +4,7 @@ import config
 import streamlit as st
 
 @st.cache_data
-def DF_EXPORTACAO(years = 15):
+def DF_EXPORTACAO(years = 15, paises=[]):
     df = pd.read_csv(config.BASE_PATH /'interim/tech_challenge/exportacao_vinhos.csv', 
                                 sep=';', skiprows=1,
                                 names=['Country', 'Year', 'Quantity (L)', 'Sales (Dollars)'])
@@ -24,6 +24,11 @@ def DF_EXPORTACAO(years = 15):
 
     # Remove the records with years earlier than the minimum year
     df = df[df['Year'] >= min_year]
+
+    # Filter only countries being analyzed
+    if (len(paises)>0):
+        df = df.loc[df['Country'].isin(paises)]
+
     return df
 
 @st.cache_data
@@ -41,7 +46,7 @@ def DF_NOAA_GLOBAL(years=15):
     df = df[df['year'] >= min_year]
 
     # Reverse country_code to country name
-    df['country_code'] = [DICT_TRANSLATES_INVERTED()[country_code] for country_code in df['country_code']]
+    df['country_code'] = [DICT_TRANSLATES_INVERTED()[country_code].replace("Marshall, Ilhas","Ilhas Marshall") for country_code in df['country_code']]
     return df
 
 # DF_VINHOS = pd.read_csv(BASE_PATH /'processed/tech_challenge/df_vinhos.csv', sep=';', decimal=',')
@@ -49,9 +54,9 @@ def DF_NOAA_GLOBAL(years=15):
 # DF_TEMP_CHANGE = pd.read_csv(BASE_PATH /'processed/temp_change/temperature_change_Data.csv', sep=';', decimal=',')
 
 @st.cache_data
-def DF_WBPY(years=15):
+def DF_WBPY(years=15, paises=[]):
     df = pd.read_csv(config.BASE_PATH /'processed/wbpy/wbpy.csv', sep=';', decimal=',')
-
+     
     # Find the maximum year in the dataframe
     max_year = df['year'].max()
 
@@ -60,6 +65,16 @@ def DF_WBPY(years=15):
 
     # Remove the records with years earlier than the minimum year
     df = df[df['year'] >= min_year]
+    # Filter countries in the shared dictionary
+    df = df.loc[df['country'].isin(list([x.upper() for x in DICT_TRANSLATES_INVERTED().keys()]))]
+
+    # Reverse country_code to country name
+    df['country'] = [DICT_TRANSLATES_INVERTED()[country_code].replace("Marshall, Ilhas","Ilhas Marshall") for country_code in df['country']]
+    
+    # Filter only countries being analyzed
+    if (len(paises)>0):
+        df = df.loc[df['country'].isin(paises)]
+    
     return df
 
 @st.cache_data
@@ -150,3 +165,37 @@ def DICT_TRANSLATES_INVERTED():
 
     base_path = config.BASE_PATH / 'processed'
     return {v.upper():k for k,v in joblib.load(base_path / "dict_translates.pkl").items()}
+
+@st.cache_data
+def LISTA_PAISES(years_to_filter):
+    df_precp = DF_PRECP_COMPARATIVE(
+                df_clima_rs=DF_RS(years_to_filter)
+                , df_noaa_global=DF_NOAA_GLOBAL()
+                , stat='PRCP', thresold_filter = 3
+            )
+    df_tavg = DF_PRECP_COMPARATIVE(
+                  df_clima_rs=DF_RS(years_to_filter)
+                , df_noaa_global=DF_NOAA_GLOBAL(years_to_filter)
+                , stat='TAVG', thresold_filter = 6
+            )
+    df_tmin = DF_PRECP_COMPARATIVE(
+                  df_clima_rs=DF_RS(years_to_filter)
+                , df_noaa_global=DF_NOAA_GLOBAL(years_to_filter)
+                , stat='TMIN', thresold_filter = 6
+            )
+    df_tmax = DF_PRECP_COMPARATIVE(
+                  df_clima_rs=DF_RS(years_to_filter)
+                , df_noaa_global=DF_NOAA_GLOBAL(years_to_filter)
+                , stat='TMAX', thresold_filter = 4
+            )
+    
+    return list(
+        set(
+            df_precp['country_code'].to_list() + 
+            df_tavg['country_code'].to_list() +
+            df_tmin['country_code'].to_list() +
+            df_tmax['country_code'].to_list() 
+        ) - set([
+            'BR-RS'
+        ]
+        ))

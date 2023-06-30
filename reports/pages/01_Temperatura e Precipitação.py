@@ -37,7 +37,7 @@ with st.expander("Mais detalhes"):
 base_path = '..\\data\\processed'
 
 # Layout do aplicativo
-tab_precipitacao, tab_temp_media, tab_temp_min, tab_temp_max = st.tabs(["Precipitação","Temperatura Média", "Temperatura Mínima", "Temperatura Máxima"])
+tab_precipitacao, tab_temp_media, tab_temp_min, tab_temp_max, tab_consideracoes_finais = st.tabs(["Precipitação","Temperatura Média", "Temperatura Mínima", "Temperatura Máxima", "Considerações Finais"])
 
 with tab_precipitacao:
     st.plotly_chart(
@@ -62,13 +62,14 @@ with tab_precipitacao:
     st.divider() # ------------------------------------------------------
     col1, col2 = st.columns([1,3])
     with col1:
-        st.plotly_chart(
-        generate_graphs._density_clima_rs(
-            df_full=get_data.DF_PRECP_COMPARATIVE(
+        df_precp = get_data.DF_PRECP_COMPARATIVE(
                 df_clima_rs=get_data.DF_RS(years_to_filter)
                 , df_noaa_global=get_data.DF_NOAA_GLOBAL()
-                , stat='PRCP'
+                , stat='PRCP', thresold_filter = 3
             )
+        st.plotly_chart(
+        generate_graphs._density_clima_rs(
+            df_full=df_precp
             , stat='PRCP'
             )
         , use_container_width=True)
@@ -128,13 +129,15 @@ with tab_temp_media:
         , use_container_width=True)
 
     with col2:
-        st.plotly_chart(
-        generate_graphs._density_noaa(
-            get_data.DF_PRECP_COMPARATIVE(
+        df_tavg = get_data.DF_PRECP_COMPARATIVE(
                   df_clima_rs=get_data.DF_RS(years_to_filter)
                 , df_noaa_global=get_data.DF_NOAA_GLOBAL(years_to_filter)
                 , stat='TAVG', thresold_filter = 6
-            ),'TAVG')
+            )
+        
+        st.plotly_chart(
+        generate_graphs._density_noaa(df_tavg
+            ,'TAVG')
         , use_container_width=True)
 
 with tab_temp_min:
@@ -169,21 +172,22 @@ with tab_temp_min:
         , use_container_width=True)
 
     with col2:
-        st.plotly_chart(
-        generate_graphs._density_noaa(
-            get_data.DF_PRECP_COMPARATIVE(
+        df_tmin = get_data.DF_PRECP_COMPARATIVE(
                   df_clima_rs=get_data.DF_RS(years_to_filter)
                 , df_noaa_global=get_data.DF_NOAA_GLOBAL(years_to_filter)
                 , stat='TMIN', thresold_filter = 6
-            ),'TMIN')
+            )
+        st.plotly_chart(
+        generate_graphs._density_noaa(df_tmin
+            ,'TMIN')
         , use_container_width=True)
 
 with tab_temp_max:
 
     with st.expander("Mais detalhes"):
         st.info("""
-            Chegando nas temperaturas mínimas, vemos países da América do sul, como Bolívia, Colômbia, Peru e Equador, dominando nas semelhanças; Muito embora, ao analisar as distribuições, Equador e Colômbia tem seus valores em faixas mais próximas de 0, uma faixa mais fácil de ser encontrada no RS. 
-            Os demais países aparecem aqui, provavelmente, por suas temperaturas no decorrer dos anos terem mais se aproximado dos valores mínimos, na faixa entre 0 e 8ºC, mas não possuem uma distribuição tão parecida com o RS.
+           Chegando nas máximas, vemos a Austrália, vizinha da Nova Zelândia, com uma distribuição (inclusive) muito semelhante ao RS;
+           Novamente, Itália e Áustria aparecem com pontos semelhantes ao RS, e Reino Unido e Suécia aparecem pela primeira vez, com faixas de temperatura entre 20 e 40 graus, trazendo alguma semelhança com a media geral por perto de 29ºC do RS.
         """,
         icon="ℹ️")
 
@@ -210,11 +214,23 @@ with tab_temp_max:
         , use_container_width=True)
 
     with col2:
-        st.plotly_chart(
-        generate_graphs._density_noaa(
-            get_data.DF_PRECP_COMPARATIVE(
+        df_tmax = get_data.DF_PRECP_COMPARATIVE(
                   df_clima_rs=get_data.DF_RS(years_to_filter)
                 , df_noaa_global=get_data.DF_NOAA_GLOBAL(years_to_filter)
                 , stat='TMAX', thresold_filter = 4
-            ),'TMAX')
+            )
+
+        st.plotly_chart(
+        generate_graphs._density_noaa(df_tmax
+            ,'TMAX')
         , use_container_width=True)
+
+with tab_consideracoes_finais:
+    st.write(
+        f"""
+        Na nossa análise, os seguintes países apareceram em evidência:
+
+        {", ".join(get_data.LISTA_PAISES(years_to_filter))}
+
+        Iremos conduzir uma análise do cenário macroeconômico, tendo em vista realizar uma abertura de empresa, ou maior investimento nesses países.
+        """)
