@@ -185,7 +185,7 @@ def _exportacoes_top10_dol(df):
     top_10_countries = sorted_df.head(10)
 
     # Create a bar chart for the total sales of the top 10 countries
-    fig = px.bar(top_10_countries, x='Country', y='Sales (Dollars)',
+    fig = px.bar(top_10_countries, x='Country', y='Sales (Dollars)', text='Sales (Dollars)',
                 title='Total de Exportações em Dólares dos Top 10 Países nos Últimos 15 Anos',
                 labels={'Sales (Dollars)': 'Total de Exportações (Dólares)'},
                 template='plotly_dark')
@@ -206,7 +206,7 @@ def _exportacoes_top10_qtd(df):
     top_10_countries = sorted_df.head(10)
 
     # Create a bar chart for the total quantity sold of the top 10 countries
-    fig = px.bar(top_10_countries, x='Country', y='Quantity (L)',
+    fig = px.bar(top_10_countries, x='Country', y='Quantity (L)', text='Quantity (L)',
                 title='Quantidade Total de L Exportados dos Top 10 Países',
                 labels={'Quantity (L)': 'Quantidade Total de L Exportados'},
                 template='plotly_dark')
@@ -222,15 +222,16 @@ def _credito_top10(df):
     df_top10 = df.sort_values(by='value', ascending=False).head(10)
 
     # Create a bar chart for the total quantity sold of the top 10 countries
-    fig = px.bar(df_top10, x='country', y='value',
+    fig = px.bar(df_top10, x='country', y='value', text='value',
                 title='Top 10 Países com Maior Crédito para o Setor Privado',
                 labels={'value': 'Crédito Setor Privado'},
                 template='plotly_dark')
 
     fig.update_yaxes(visible=True,
                     gridcolor='black',zeroline=True,
-                    showticklabels=False, title='Crédito Setor Privado'
+                    showticklabels=True, title='Crédito Setor Privado',
                     )
+    
     # Set layout properties
     fig.update_layout(showlegend=False, 
                       xaxis={'categoryorder': 'total descending'})
@@ -243,7 +244,7 @@ def _register_business_top10(df):
     df_top10 = df.sort_values(by='value', ascending=True).head(10)
     
     # Create a bar chart for the total quantity sold of the top 10 countries
-    fig = px.bar(df_top10, x='country', y='value',
+    fig = px.bar(df_top10, x='country', y='value',text='value',
                 template='plotly_dark')
 
     fig.update_yaxes(visible=True,
@@ -266,7 +267,7 @@ def _crescimento_pop_top10(df):
     df_top10 = df.sort_values(by='value', ascending=False).head(10)
 
     # Create a bar chart for the total quantity sold of the top 10 countries
-    fig = px.bar(df_top10, x='country', y='value',
+    fig = px.bar(df_top10, x='country', y='value',text='value',
                 title='Top 10 Países com Maior crescimento populacional',
                 template='plotly_dark')
 
@@ -290,7 +291,7 @@ def _logistic_groups(df):
     
     # Create a bar chart for the total quantity sold of the top 10 countries
     fig = px.bar(df, 
-                y='country', x='metric', color='Faixa do índice',
+                y='country', x='metric', color='Faixa do índice', text='country',
                 title='Top 10 Países com Maior crescimento populacional',
                 template='plotly_dark')
 

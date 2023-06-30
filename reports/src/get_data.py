@@ -46,7 +46,7 @@ def DF_NOAA_GLOBAL(years=15):
     df = df[df['year'] >= min_year]
 
     # Reverse country_code to country name
-    df['country_code'] = [DICT_TRANSLATES_INVERTED()[country_code].replace("Marshall, Ilhas","Ilhas Marshall") for country_code in df['country_code']]
+    df['country_code'] = df['country_code'].map(DICT_TRANSLATES_INVERTED())
     return df
 
 # DF_VINHOS = pd.read_csv(BASE_PATH /'processed/tech_challenge/df_vinhos.csv', sep=';', decimal=',')
@@ -66,10 +66,10 @@ def DF_WBPY(years=15, paises=[]):
     # Remove the records with years earlier than the minimum year
     df = df[df['year'] >= min_year]
     # Filter countries in the shared dictionary
-    df = df.loc[df['country'].isin(list([x.upper() for x in DICT_TRANSLATES_INVERTED().keys()]))]
+    df = df.loc[df['country'].isin(list(DICT_TRANSLATES_INVERTED().keys()))]
 
     # Reverse country_code to country name
-    df['country'] = [DICT_TRANSLATES_INVERTED()[country_code].replace("Marshall, Ilhas","Ilhas Marshall") for country_code in df['country']]
+    df['country'] = df['country'].map(DICT_TRANSLATES_INVERTED())
     
     # Filter only countries being analyzed
     if (len(paises)>0):
@@ -164,7 +164,7 @@ def DICT_TRANSLATES_INVERTED():
     import joblib
 
     base_path = config.BASE_PATH / 'processed'
-    return {v.upper():k for k,v in joblib.load(base_path / "dict_translates.pkl").items()}
+    return {v.upper():k.replace("Marshall, Ilhas","Ilhas Marshall").replace("Tcheca, República","República Tcheca") for k,v in joblib.load(base_path / "dict_translates.pkl").items()}
 
 @st.cache_data
 def LISTA_PAISES(years_to_filter):
