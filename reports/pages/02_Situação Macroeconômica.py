@@ -42,6 +42,10 @@ with st.expander("Mais detalhes"):
 tab_credito, tab_logistica_pop, tab_top10_exportacoes = st.tabs(["Crédito e Abertura de Empresa","Logística e População", "Top 10 Exportações"])
 
 with tab_credito:
+    with st.expander("Mais detalhes"):
+        st.info(f"""
+                """)
+        
     st.plotly_chart(
         generate_graphs._credito_top10(get_data.DF_WBPY(years_to_filter, paises))
         , use_container_width=True
@@ -55,6 +59,10 @@ with tab_credito:
     )
 
 with tab_logistica_pop:
+    with st.expander("Mais detalhes"):
+        st.info(f"""
+                """)
+        
     st.plotly_chart(
         generate_graphs._crescimento_pop_top10(get_data.DF_WBPY(years_to_filter, paises))
         , use_container_width=True
@@ -75,6 +83,10 @@ with tab_logistica_pop:
         )
 
 with tab_top10_exportacoes:
+    with st.expander("Mais detalhes"):
+        st.info(f"""
+                """)
+        
     st.plotly_chart(
     generate_graphs._exportacoes_top10_dol(get_data.DF_EXPORTACAO(years_to_filter, paises))
     , use_container_width=True)
