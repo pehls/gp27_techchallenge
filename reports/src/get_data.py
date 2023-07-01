@@ -32,6 +32,54 @@ def DF_EXPORTACAO(years = 15, paises=[]):
     return df
 
 @st.cache_data
+def DF_WINE_SELLED(years=15):
+    df = pd.read_csv(config.BASE_PATH /'interim/tech_challenge/comercio_vinhos_rs.csv', sep=';', decimal=',')
+
+    # Remove as linhas que não contêm "_" na coluna "id_produto"
+    df = df[df['id_produto'].str.contains('_')]
+
+    # Find the maximum year in the dataframe
+    max_year = df['ano'].max()
+
+    # Calculate the minimum year to keep based on the maximum year and 15-year threshold
+    min_year = max_year - years
+
+    # Remove the records with years earlier than the minimum year
+    df = df[df['ano'] >= min_year]
+
+    # Agrupa por produto e calcula a soma da quantidade exportada
+    df_soma_exportacao = df.groupby('produto')['quantidade_com_rs'].sum().reset_index()
+
+    # Calcula a soma total
+    soma_total = df_soma_exportacao['quantidade_com_rs'].sum()
+
+    # Calcula a representatividade da quantidade
+    df_soma_exportacao['representatividade'] = df_soma_exportacao['quantidade_com_rs'] / soma_total * 100
+
+    # Ordena o DataFrame pela soma total em ordem decrescente
+    df_soma_exportacao = df_soma_exportacao.sort_values(by='quantidade_com_rs', ascending=False)
+    return df_soma_exportacao
+
+@st.cache_data
+def DF_WINE_RATINGS(years=15):
+    df = pd.read_csv(config.BASE_PATH /'processed/wine_ratings/winemag-data-130k-v2.csv', sep=',')[['country', 'designation', 'points', 'province', 'title', 'variety']]
+
+    df['tipo'] = df['variety'].map(lambda x: config.DICT_TIPO_VINHO.get(x, 'Outro'))
+
+    # Remover as linhas em que o tipo de vinho é 'Outro'
+    df = df[df['tipo'] != 'Outro']
+
+    # Agrupar os dados por país e tipo, calculando a média dos pontos
+    grouped_df = df.groupby(['country', 'tipo']).agg({'points': 'mean'})
+
+    # Resetar o índice do DataFrame
+    grouped_df = grouped_df.reset_index()
+
+    # Ordenar o DataFrame agrupado por país em ordem alfabética
+    grouped_df_sorted = grouped_df.sort_values(by='country')
+    return grouped_df_sorted
+
+@st.cache_data
 def DF_NOAA_GLOBAL(years=15):
     df = pd.read_csv(config.BASE_PATH /'processed/noaa_global/noaa_global_final.csv', sep=';', decimal=',')
 

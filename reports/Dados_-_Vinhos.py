@@ -31,7 +31,7 @@ with st.expander("Mais detalhes"):
     """)
 
 # Layout do aplicativo
-tab_geral, tab_paises_exportacoes, tab_top10_exportacoes = st.tabs(["Geral","Exportações por País", "Top 10 Exportações"])
+tab_geral, tab_paises_exportacoes, tab_top10_exportacoes, tab_reviews, tab_consideracoes_finais = st.tabs(["Geral","Exportações por País", "Top 10 Exportações","Avaliações de Vinhos", "Considerações Finais"])
 
 with tab_geral:
     st.plotly_chart(
@@ -65,3 +65,32 @@ with tab_top10_exportacoes:
     st.plotly_chart(
     generate_graphs._exportacoes_top10_qtd(get_data.DF_EXPORTACAO(years_to_filter))
     , use_container_width=True)
+
+with tab_reviews:
+    st.plotly_chart(
+    generate_graphs._comercio_no_rs(get_data.DF_WINE_SELLED(years_to_filter).head(10))
+    , use_container_width=True)
+
+    st.divider() # ------------------------------------------------------
+    col1, col2, col3, col4 = st.columns([1,1,1,1])
+
+    graphs_ratings = generate_graphs._wine_ratings(get_data.DF_WINE_RATINGS(years_to_filter))
+    with col1:
+        st.plotly_chart(
+        graphs_ratings[0]
+        , use_container_width=True)
+
+    with col2:
+        st.plotly_chart(
+        graphs_ratings[1]
+        , use_container_width=True)
+    
+    with col3:
+        st.plotly_chart(
+        graphs_ratings[2]
+        , use_container_width=True)
+    
+    with col4:
+        st.plotly_chart(
+        graphs_ratings[3]
+        , use_container_width=True)

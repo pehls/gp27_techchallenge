@@ -366,3 +366,77 @@ def _density_clima_rs(df_full, stat):
         <br><sup>Distribuição nos anos</sup>"""
     })
     return fig
+
+def _comercio_no_rs(df):
+        # Create a figure with two y-axes
+    fig = go.Figure()
+
+    # Create a bar trace for total sales in dollars
+    fig.add_trace(go.Bar(x=df['produto'], y=df['quantidade_com_rs'],
+                        name='Quantidade Comercializada no RS', marker_color='blue', yaxis='y'))
+
+    # Create a scatter trace for total quantity in kgs
+    fig.add_trace(go.Scatter(x=df['produto'], y=df['representatividade'],
+                            name='Representatividade', mode='lines+markers', marker_color='red', yaxis='y2'))
+
+    # Set layout properties
+    fig.update_layout(title='Comércio de produtos derivados do vinho nos últimos 15 anos',
+                    xaxis_title='Produto', yaxis=dict(title='Quantidade Comercializada no RS'),
+                    yaxis2=dict(title='Representatividade', overlaying='y', side='right'),
+                    legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+                    template='plotly_dark')
+    
+    # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
+
+    return fig 
+
+def _wine_ratings(df):
+
+    # Ordenar o DataFrame por tipo, média e país, com points em ordem decrescente
+    grouped_df = df.sort_values(by=['tipo', 'points', 'country'], ascending=[True, False, True])
+
+    # Criar os gráficos de barra separados
+    figs = []
+
+    # Definir as cores para cada tipo de vinho
+    colors = {'tinto': 'red', 'branco': 'grey', 'rosado': 'pink', 'espumante':'yellow'}
+
+    # Encontrar a pontuação média do país "Brazil"
+    brazil_mean_points = grouped_df[(grouped_df['country'] == 'Brazil')]['points'].mean()
+
+    # Gerar um gráfico de barra para cada tipo de vinho
+    for tipo in grouped_df['tipo'].unique():
+        data = grouped_df[grouped_df['tipo'] == tipo]
+        data = data.sort_values(by='points', ascending=False).head(5)
+
+        # Criar a figura para o tipo de vinho atual
+        fig = go.Figure()
+
+        # Adicionar um trace de barra para o tipo de vinho atual
+        fig.add_trace(go.Bar(x=data['country'], y=data['points'], name=tipo, marker_color=colors[tipo]))
+
+        # Adicionar uma linha horizontal tracejada no valor da pontuação média do país "Brazil"
+        fig.add_shape(
+            type='line',
+            x0=data['country'].iloc[0],
+            x1=data['country'].iloc[-1],
+            y0=brazil_mean_points,
+            y1=brazil_mean_points,
+            line=dict(color='black', width=3, dash='dash')
+        )
+
+        # Configurar o layout do gráfico atual
+        fig.update_layout(
+            title=f'Top 5 - Média de Pontuação por País - Tipo: {tipo}',
+            xaxis=dict(title='País'),
+            yaxis=dict(title='Pontuação Média'),
+            barmode='group'
+        )
+
+        figs.append(fig)
+
+    # Exibir os gráficos separadamente, um abaixo do outro
+    return figs
