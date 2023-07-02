@@ -196,7 +196,7 @@ def _exportacoes_top10_dol(df):
     grouped_df = df.groupby('Country').agg({'Sales (Dollars)': 'sum', 'Quantity (L)': 'sum'}).reset_index()
 
     # Sort the data by total sales in descending order
-    grouped_df = grouped_df.sort_values(by='Quantity (L)', ascending=False)
+    grouped_df = grouped_df.sort_values(by='Quantity (L)', ascending=False).head(10)
 
     # Create a figure with two y-axes
     fig = go.Figure()

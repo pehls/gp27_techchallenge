@@ -93,10 +93,6 @@ with tab_top10_exportacoes:
 
     st.divider() # ------------------------------------------------------
 
-    st.plotly_chart(
-    generate_graphs._exportacoes_top10_qtd(get_data.DF_EXPORTACAO(years_to_filter))
-    , use_container_width=True)
-
 with tab_reviews:
     st.plotly_chart(
     generate_graphs._comercio_no_rs(
