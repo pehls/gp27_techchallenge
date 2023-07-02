@@ -121,7 +121,6 @@ with tab_reviews:
         graphs_ratings[2]
         , use_container_width=True)
     
-
 with tab_reviews_opportunity:
     col1, col2, col3 = st.columns([1,1,1])
 
