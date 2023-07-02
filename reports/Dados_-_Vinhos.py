@@ -27,7 +27,13 @@ st.write("""
 # add an exapnder for the user to display more info about the app
 with st.expander("Mais detalhes"):
     st.info("""
-    Texto bonitão aqui
+        Para iniciar nossas análises e entender o contexto em que está inserida a vinícola, utilizamos os dados da [Vitivinicultura](http://vitibrasil.cnpuv.embrapa.br/index.php?opcao=opt_02), disponibilizados na descrição do tech challenge. 
+        Dentro da base do conjunto de dados explorados, temos o histórico anual de vendas por país em quantidade de litros (KG), que nos gráficos, mudamos para (L) e o valor em dólares (USD), que nos mostram uma visão geral das exportações da vinícola em questão.
+        Com base nos gráficos disponibilizados a seguir, podemos extrair as seguintes informações para maximizar as exportações da vinícola:
+        - Identificar os países de maior destaque em exportações (em Quantidade Total de Vendas);
+        - Identificar países com maior valor médio por litro;
+        - Avaliar a evolução das exportações ao longo dos anos;
+        A partir destes dados, podemos começar a explorar novas bases de dados (demográficos,  climáticos, econômicos e de avaliações de vinhos) para entender como esses fatores externos podem nos trazer indicadores dos potenciais países que temos que maximizar, manter ou reduzir esforços em relação às exportações.    
     """)
 
 # Layout do aplicativo
@@ -38,22 +44,47 @@ with tab_geral:
     generate_graphs._exportacao_dolar_quantidade_ano(get_data.DF_EXPORTACAO(years_to_filter))
     , use_container_width=True)
 
+    with st.expander("Mais detalhes"):
+            st.info("""
+                - Notamos um comportamento de crescimento, desde 2015 nos dois indicadores. 
+                - No ano de 2009 existe uma quantidade em L vendidos muito maior do que nos demais anos do período estudado, além do valor em dólares exportações no ano de 2013. A Rússia foi o maior responsável por esses aumentos.
+            """)
+
     st.divider() # ------------------------------------------------------
 
     st.plotly_chart(
     generate_graphs._proporcao_valor_por_litro_vendido_pais_ano(get_data.DF_EXPORTACAO(years_to_filter))
     , use_container_width=True)
 
+    with st.expander("Mais detalhes",):
+            st.info("""
+                - Analisando o gráfico de valor em dólares por litro vendido por país e ano, é possível identificar os países que estão dispostos a pagar um preço mais elevado por litro de vinho. Esses países podem representar oportunidades de mercado para vinhos de alta qualidade e de maior valor agregado.
+                - Países que apareceram com mais constância em países que exportaram por um valor médio mais alto em comparação aos demais nos últimos 15 anos.
+	            - Suiça, Canadá, Rep. Tcheca, Dinamarca*, Austrália, China
+            """)
+
 with tab_paises_exportacoes:
     st.plotly_chart(
     generate_graphs._exportacao_vinhos_por_pais(get_data.DF_EXPORTACAO(years_to_filter))
     , use_container_width=True)
+
+    with st.expander("Mais detalhes",):
+            st.info("""
+                - A partir dos gráficos, é possível verificar países que o Paraguai aparece constantemente como país que mais exportou anualmente (em dólares), principalmente nos últimos 5 anos, aparecendo como país que mais exportou. Estados Unidos e Rússia também aparecem constantemente nos países que mais gastam anualmente.
+                - Dentro dos anos analisados, a Rússia foi a que mais se destacou em valores gastos de maneira sazonal, em 2008 ~ (US\$ 2Mi), 2009 ~ (US\$ 6Mi), 2013 ~ (US\$ 15Mi), nos demais anos, os valores gastos foram muito mais controlados (menores que US\$ 500k).
+            """)
 
     st.divider() # ------------------------------------------------------
 
     st.plotly_chart(
     generate_graphs._quantidade_vendida_por_pais_ano(get_data.DF_EXPORTACAO(years_to_filter))
     , use_container_width=True)
+
+    with st.expander("Mais detalhes",):
+            st.info("""
+                - Dentro destes gráficos, notamos que o Paraguai é o país que mais exporta vinho do Brasil em quantidade de L e de forma mais constante, históricamente. 
+                - A Rússia, por conta de suas compras sazonais aparece em segundo no período estudado.
+            """)
 
 with tab_top10_exportacoes:
     st.plotly_chart(
