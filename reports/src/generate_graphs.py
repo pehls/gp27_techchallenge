@@ -102,7 +102,11 @@ def _exportacao_vinhos_por_pais(df):
 
     # Set layout properties
     fig.update_layout(showlegend=False, xaxis={'categoryorder': 'total descending'}, yaxis_title='Total de Exportações (Dólares)')
-
+    
+    # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
     return fig
 
 def _quantidade_vendida_por_pais_ano(df):
@@ -124,6 +128,10 @@ def _quantidade_vendida_por_pais_ano(df):
     # Set layout properties
     fig.update_layout(showlegend=False, xaxis={'categoryorder': 'total descending'}, yaxis_title='Quantidade de Kgs Vendidos')
 
+     # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
     return fig
 
 def _proporcao_valor_por_litro_vendido_pais_ano(df):
@@ -148,6 +156,10 @@ def _proporcao_valor_por_litro_vendido_pais_ano(df):
     # Set layout properties
     fig.update_layout(showlegend=False, xaxis={'categoryorder': 'total descending'}, yaxis_title='Coeficiente (Valor em Dólares/Kg)')
 
+     # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
     return fig
 
 def _exportacao_dolar_quantidade_ano(df):
@@ -172,48 +184,41 @@ def _exportacao_dolar_quantidade_ano(df):
                     legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
                     template='plotly_dark')
     
+     # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
+
     return fig 
 
 def _exportacoes_top10_dol(df):
-    # Group the data by country and calculate the total sales
-    grouped_df = df.groupby('Country')['Sales (Dollars)'].sum().reset_index()
+     # Group the data by year and calculate the total sales and quantity
+    grouped_df = df.groupby('Country').agg({'Sales (Dollars)': 'sum', 'Quantity (L)': 'sum'}).reset_index()
 
     # Sort the data by total sales in descending order
-    sorted_df = grouped_df.sort_values(by='Sales (Dollars)', ascending=False)
+    grouped_df = grouped_df.sort_values(by='Quantity (L)', ascending=False)
 
-    # Filter the top 10 countries
-    top_10_countries = sorted_df.head(10)
+    # Create a figure with two y-axes
+    fig = go.Figure()
 
-    # Create a bar chart for the total sales of the top 10 countries
-    fig = px.bar(top_10_countries, x='Country', y='Sales (Dollars)', text='Sales (Dollars)',
-                title='Total de Exportações em Dólares dos Top 10 Países nos Últimos 15 Anos',
-                labels={'Sales (Dollars)': 'Total de Exportações (Dólares)'},
-                template='plotly_dark')
+    # Create a bar trace for total sales in dollars
+    fig.add_trace(go.Bar(x=grouped_df['Country'], y=grouped_df['Quantity (L)'],
+                        name='Quantidade de L Vendidos', marker_color='blue', yaxis='y'))
 
-    # Set layout properties
-    fig.update_layout(showlegend=False, xaxis={'categoryorder': 'total descending'}, yaxis_title='Total de Exportações (Dólares)')
-
-    return fig
-
-def _exportacoes_top10_qtd(df):
-    # Group the data by country and calculate the total quantity sold
-    grouped_df = df.groupby('Country')['Quantity (L)'].sum().reset_index()
-
-    # Sort the data by total quantity in descending order
-    sorted_df = grouped_df.sort_values(by='Quantity (L)', ascending=False)
-
-    # Filter the top 10 countries
-    top_10_countries = sorted_df.head(10)
-
-    # Create a bar chart for the total quantity sold of the top 10 countries
-    fig = px.bar(top_10_countries, x='Country', y='Quantity (L)', text='Quantity (L)',
-                title='Quantidade Total de L Exportados dos Top 10 Países',
-                labels={'Quantity (L)': 'Quantidade Total de L Exportados'},
-                template='plotly_dark')
+    # Create a scatter trace for total quantity in kgs
+    fig.add_trace(go.Scatter(x=grouped_df['Country'], y=grouped_df['Sales (Dollars)'],
+                            name='Total de Exportações (Dólares)', mode='lines+markers', marker_color='red', yaxis='y2'))
 
     # Set layout properties
-    fig.update_layout(showlegend=False, xaxis={'categoryorder': 'total descending'}, yaxis_title='Quantidade Total de L Exportados')
-
+    fig.update_layout(title='Exportações em dólares e Quantidade de L vendidos por país',
+                    xaxis_title='País', yaxis=dict(title='Total de Exportações (Dólares)'),
+                    yaxis2=dict(title='Quantidade de L Vendidos', overlaying='y', side='right'),
+                    legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+                    template='plotly_dark')
+     # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
     return fig
 
 def _credito_top10(df):
@@ -236,6 +241,10 @@ def _credito_top10(df):
     fig.update_layout(showlegend=False, 
                       xaxis={'categoryorder': 'total descending'})
 
+     # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
     return fig
 
 def _register_business_top10(df):
@@ -259,6 +268,11 @@ def _register_business_top10(df):
         'text' : f"""<b>Top 10 Países com menos procedimentos para abertura de empresas</b> 
         <br><sup>Notamos que existem países com 0 procedimentos, por isso acabamos filtrando!</sup>"""
     })
+
+     # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
     return fig
 
 def _crescimento_pop_top10(df):
@@ -279,6 +293,10 @@ def _crescimento_pop_top10(df):
     fig.update_layout(showlegend=False, 
                       xaxis={'categoryorder': 'total descending'})
 
+     # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
     return fig
 
 def _logistic_groups(df):
@@ -309,6 +327,10 @@ def _logistic_groups(df):
         'text' : f"""<b>Performace Logística dos Países</b> 
         <br><sup>Quantidade de Países por faixa</sup>"""
     })
+     # Ajustar dado do hover
+    fig.update_layout(
+        hovermode='x unified',
+    )
     return fig
 
 def _logistic_bests(df):
@@ -404,14 +426,16 @@ def _wine_ratings(df):
     # Definir as cores para cada tipo de vinho
     colors = {'tinto': 'red', 'branco': 'grey', 'rosado': 'pink', 'espumante':'yellow'}
 
-    # Encontrar a pontuação média do país "Brazil"
-    brazil_mean_points = grouped_df[(grouped_df['country'] == 'Brazil')]['points'].mean()
 
     # Gerar um gráfico de barra para cada tipo de vinho
     for tipo in grouped_df['tipo'].unique():
         data = grouped_df[grouped_df['tipo'] == tipo]
-        data = data.sort_values(by='points', ascending=False).head(5)
 
+        # Encontrar a pontuação média do país "Brazil"
+        brazil_mean_points = data[(data['country'] == 'Brazil')]['points'].mean()
+
+        data = data.sort_values(by='points', ascending=False).head(5)
+        
         # Criar a figura para o tipo de vinho atual
         fig = go.Figure()
 
@@ -426,6 +450,56 @@ def _wine_ratings(df):
             y0=brazil_mean_points,
             y1=brazil_mean_points,
             line=dict(color='black', width=3, dash='dash')
+        )
+
+        # Configurar o layout do gráfico atual
+        fig.update_layout(
+            title=f'Top 5 - Média de Pontuação por País - Tipo: {tipo}',
+            xaxis=dict(title='País'),
+            yaxis=dict(title='Pontuação Média'),
+            barmode='group'
+        )
+
+        figs.append(fig)
+
+    # Exibir os gráficos separadamente, um abaixo do outro
+    return figs
+
+def _wine_ratings_opportunity(df):
+
+    # Ordenar o DataFrame por tipo, média e país, com points em ordem decrescente
+    grouped_df = df.sort_values(by=['tipo', 'points', 'country'], ascending=[True, False, True])
+
+    # Criar os gráficos de barra separados
+    figs = []
+
+    # Definir as cores para cada tipo de vinho
+    colors = {'tinto': 'red', 'branco': 'grey', 'rosado': 'pink', 'espumante':'yellow'}
+
+    # Gerar um gráfico de barra para cada tipo de vinho
+    for tipo in grouped_df['tipo'].unique():
+        data = grouped_df[grouped_df['tipo'] == tipo]
+
+        # Encontrar a pontuação média do país "Brazil" + tolerancia de 15%
+        brazil_mean_points = (data[(data['country'] == 'Brazil')]['points'].mean()) * 1.015
+
+        data = data[(data['points'] <= brazil_mean_points)].sort_values(by='points', ascending=False).head(6)
+
+
+        # Criar a figura para o tipo de vinho atual
+        fig = go.Figure()
+
+        # Adicionar um trace de barra para o tipo de vinho atual
+        fig.add_trace(go.Bar(x=data['country'], y=data['points'], name=tipo, marker_color=colors[tipo]))
+
+        # Adicionar uma linha horizontal tracejada no valor da pontuação média do país "Brazil"
+        fig.add_shape(
+            type='line',
+            x0=data['country'].iloc[0],
+            x1=data['country'].iloc[-1],
+            y0=brazil_mean_points,
+            y1=brazil_mean_points,
+            line=dict(color='green', width=6, dash='dash')
         )
 
         # Configurar o layout do gráfico atual

@@ -74,7 +74,6 @@ def DF_WINE_RATINGS(years=15):
 
     # Resetar o índice do DataFrame
     grouped_df = grouped_df.reset_index()
-
     # Ordenar o DataFrame agrupado por país em ordem alfabética
     grouped_df_sorted = grouped_df.sort_values(by='country')
     return grouped_df_sorted

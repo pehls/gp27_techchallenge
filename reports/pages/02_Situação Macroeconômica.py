@@ -20,7 +20,7 @@ with st.sidebar.expander("Selecionar time frame"):
         value=[15],
         step=1, min_value=1, max_value=(date.today().year - 1970))[0]
 
-paises = get_data.LISTA_PAISES(years_to_filter)
+paises = get_data.LISTA_PAISES(years_to_filter) + ['Ucrânia','Egito','Uruguai','Portugal','Espanha','México','Israel'] # Países que apareceram na análise das avaliações
 st.write("""
 # Situação Macroeconômica
 """)     
@@ -83,16 +83,18 @@ with tab_logistica_pop:
         )
 
 with tab_top10_exportacoes:
-    with st.expander("Mais detalhes"):
-        st.info(f"""
-                """)
         
     st.plotly_chart(
     generate_graphs._exportacoes_top10_dol(get_data.DF_EXPORTACAO(years_to_filter, paises))
     , use_container_width=True)
 
+    st.write(f"""
+             - Destacamos aqui a pequena presença nos países da África do Sul, India, Áustria, Equador, Nova Caledônia, Malta, México, Nova Zelândia, Peru, Colômbia, Argentina e Venezuela;
+             - Os países da América do sul, em específico, poderiam ser ótimos alvos, pela facilidade em logística e proximidade;
+             - Equador, Malta, Austrália, Colômbia, India, México e África do Sul ainda despontam com um crescimento populacional excelente;
+             - Ao analisarmos a Performance Logística, temos a presença do Reino Unido, Finlândia, Áustria e Suécia, como integrantes da melhor faixa do índice;
+             - Reino Unido, Austrália, África do Sul e Nova Caledônia ainda pontuam por estarem dentro do top 10 de países com maior crédito para o setor privado;
+             - Nova Zelândia, de forma disparada, possui a menor burocracia para abertura de empresas, estando a Austrália, México, Nova Caledônia e Reino Unido dentro do top 10 novamente.
+             """)
     st.divider() # ------------------------------------------------------
 
-    st.plotly_chart(
-    generate_graphs._exportacoes_top10_qtd(get_data.DF_EXPORTACAO(years_to_filter, paises))
-    , use_container_width=True)
