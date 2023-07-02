@@ -104,12 +104,12 @@ with tab_reviews:
     col1, col2, col3 = st.columns([1,1,1])
 
     graphs_ratings = generate_graphs._wine_ratings(
-        get_data.DF_WINE_RATINGS(years_to_filter)
+        get_data.DF_WINE_RATINGS()
         )
     with col1:
         st.plotly_chart(
         graphs_ratings[0]
-        , use_container_width=True)
+        , use_container_width=True)             
 
     with col2:
         st.plotly_chart(
@@ -124,7 +124,7 @@ with tab_reviews:
 with tab_reviews_opportunity:
     col1, col2, col3 = st.columns([1,1,1])
 
-    graphs_ratings = generate_graphs._wine_ratings_opportunity(get_data.DF_WINE_RATINGS(years_to_filter))
+    graphs_ratings = generate_graphs._wine_ratings_opportunity(get_data.DF_WINE_RATINGS())
     with col1:
         st.plotly_chart(
         graphs_ratings[0]

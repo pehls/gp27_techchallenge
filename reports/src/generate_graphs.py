@@ -514,3 +514,52 @@ def _wine_ratings_opportunity(df):
 
     # Exibir os gráficos separadamente, um abaixo do outro
     return figs
+
+def _br_density_ratings(df_full, _type='espumante'):
+    fig = px.violin(
+        df_full.loc[(df_full['country']=='Brazil') & (df_full['tipo']==_type)], 
+        x='tipo', y='points', color='country'
+        , box=True
+        , points='all'
+    )
+
+    # hide axes
+    fig.update_xaxes(visible=True, title='')
+    fig.update_yaxes(visible=True, title='')
+
+    fig.update_layout(title={
+        'text' : f"""<b>Avaliações do Brasil - {_type}</b> 
+        <br><sup>Distribuição nos anos</sup>"""
+    })
+    return fig
+
+def _density_ratings(df_full, _type='espumante'):
+    df_top10 = df_full.loc[df_full['country']!='Brazil'].groupby(['country'])['points'].agg(['mean','count']).reset_index()
+    # Filtrar países com pelo menos 30 avaliações
+    df_top10 = df_top10[df_top10['count'] >= 30].nlargest(columns='mean', n=10)
+
+    fig = px.violin(
+        df_full.loc[df_full['country'].isin(df_top10['country'].to_list())], 
+        x='tipo', y='points', color='country'
+        , box=True
+        , points='all'
+    )
+
+    # hide axes
+    fig.update_xaxes(visible=True, title='')
+    fig.update_yaxes(visible=True, title=''
+                    )
+
+    fig.update_layout(title={
+        'text' : f"""<b>Avaliações - {_type}</b> 
+        <br><sup>Distribuição nos anos</sup>"""
+    })
+    return fig
+
+def _densities_ratings(df):
+    return {
+        _type : {
+            'Brasil':_br_density_ratings(df, _type),
+            'top10':_density_ratings(df, _type)
+        } for _type in df['tipo'].unique()
+    }

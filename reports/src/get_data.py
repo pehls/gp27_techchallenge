@@ -61,7 +61,7 @@ def DF_WINE_SELLED(years=15):
     return df_soma_exportacao
 
 @st.cache_data
-def DF_WINE_RATINGS(years=15):
+def DF_WINE_RATINGS():
     df = pd.read_csv(config.BASE_PATH /'processed/wine_ratings/winemag-data-130k-v2.csv', sep=',')[['country', 'designation', 'points', 'province', 'title', 'variety']]
 
     df['tipo'] = df['variety'].map(lambda x: config.DICT_TIPO_VINHO.get(x, 'Outro'))
@@ -76,6 +76,19 @@ def DF_WINE_RATINGS(years=15):
     grouped_df = grouped_df.reset_index()
     # Ordenar o DataFrame agrupado por país em ordem alfabética
     grouped_df_sorted = grouped_df.sort_values(by='country')
+    return grouped_df_sorted
+
+@st.cache_data
+def DF_FULL_WINE_RATINGS():
+    df = pd.read_csv(config.BASE_PATH /'processed/wine_ratings/winemag-data-130k-v2.csv', sep=',')[['country', 'designation', 'points', 'province', 'title', 'variety']]
+
+    df['tipo'] = df['variety'].map(lambda x: config.DICT_TIPO_VINHO.get(x, 'Outro'))
+
+    # Remover as linhas em que o tipo de vinho é 'Outro'
+    df = df[df['tipo'] != 'Outro']
+
+    # Ordenar o DataFrame agrupado por país em ordem alfabética
+    grouped_df_sorted = df.sort_values(by='country')
     return grouped_df_sorted
 
 @st.cache_data
