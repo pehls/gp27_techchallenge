@@ -60,7 +60,7 @@ with tab_geral:
             st.info("""
                 - Analisando o gráfico de valor em dólares por litro vendido por país e ano, é possível identificar os países que estão dispostos a pagar um preço mais elevado por litro de vinho. Esses países podem representar oportunidades de mercado para vinhos de alta qualidade e de maior valor agregado.
                 - Países que apareceram com mais constância em países que exportaram por um valor médio mais alto em comparação aos demais nos últimos 15 anos.
-	            - Suiça, Canadá, Rep. Tcheca, Dinamarca*, Austrália, China
+                - Suiça, Canadá, Rep. Tcheca, Dinamarca*, Austrália, China.
             """)
 
 with tab_paises_exportacoes:
