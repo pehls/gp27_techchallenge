@@ -228,7 +228,6 @@ def _adjust_temperature(row, var):
             return np.nan
     return row[var]
 
-
 def process_noaa_global(logger):
     base_path = 'data\\raw\\noaa_global'
     dest_path = 'data\\interim\\noaa_global'
@@ -320,6 +319,95 @@ def process_wbpy(logger):
     df_wbpy.to_csv(dest_path+'wbpy.csv', index=False, sep=';', decimal=',')
 
     logger.info('-- Finished wbpy data...')
+
+def process_rs_climate_data(logger):
+    logger.info('RS Climate data...')
+    
+    logger.info('Processing raw > interim...')
+
+    columns = {
+        'DATA (YYYY-MM-DD)': 'data', 
+        'HORA (UTC)': 'hora', 
+        'PRECIPITAÇÃO TOTAL, HORÁRIO (mm)': 'prec',
+        'TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)': 'temp_max',
+        'TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)': 'temp_min',
+    }
+    columns2 = {
+        'Data': 'data', 
+        'Hora UTC': 'hora', 
+        'PRECIPITAÇÃO TOTAL, HORÁRIO (mm)': 'prec',
+        'TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)': 'temp_max',
+        'TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)': 'temp_min',
+    }
+    base_path = 'data\\raw\\inmet_dados_hist\\'
+    dest_path = 'data\\interim\\inmet_dados_hist\\'
+    test_dir(dest_path)
+
+    df_final = None
+    for file in os.listdir(base_path):
+        try:
+            _, regiao, uf, _, municipio, _, _, final = file.split('_')
+
+            if uf != 'RS':
+                continue
+            ano = int(final.split('.')[0][-4:])
+            df = pd.read_csv(f'{base_path}/{file}',
+                            sep=';',
+                            encoding='ISO-8859-1',
+                            skiprows=8)
+            if ano < 2019: # a partir de 2019 mudou o padrão do cabeçalho
+                df = df[columns.keys()]
+                df.columns = columns.values()
+            else:
+                df = df[columns2.keys()]
+                df.columns = columns2.values()
+            df['regiao'] = regiao
+            df['uf'] = uf
+            df['municipio'] = municipio
+
+            df_final = pd.concat([df_final, df], ignore_index=True)
+        except:
+            print(f'Erro ao processar arquivo {file}')
+    df_final.to_csv(dest_path + 'rs.csv', sep=';', decimal=',', index=False)
+    
+    logger.info('Processing interim > processed...')
+
+    base_path = 'data\\raw\\inmet_dados_hist\\'
+    dest_path = 'data\\processed\\inmet\\'
+    test_dir(dest_path)
+
+    df_clima_rs =  pd.read_csv(base_path + 'rs.csv', sep=';', decimal=',')
+    df_clima_rs['data'] = pd.to_datetime(df_clima_rs['data'], format='mixed')
+
+    # -9999.0 was used as a replace for nan values, so we put nan in it again:
+    df_clima_rs['temp_min'] = df_clima_rs['temp_min'].replace(-9999.0, np.nan)
+    df_clima_rs['temp_max'] = df_clima_rs['temp_max'].replace(-9999.0, np.nan)
+    df_clima_rs['prec'] = df_clima_rs['prec'].replace(-9999.0, np.nan)
+
+    # first, calculate daily precipitation rating, and max-min of temp:
+    df_clima_rs = df_clima_rs.groupby('data').agg({
+        'prec':'sum',
+        'temp_max':('mean','max'),
+        'temp_min':'min'
+    }).reset_index()
+
+    df_clima_rs.columns = ['data','PRCP','TAVG','TMAX','TMIN']
+
+    # now, we calculate the same metrics per year, recovering the mean for each variable in the year (same as noaa data):
+
+    df_clima_rs['year'] = df_clima_rs.data.dt.year
+
+    df_clima_rs = df_clima_rs.groupby('year').agg({
+        'PRCP':'median',
+        'TAVG':'mean',
+        'TMAX':'mean',
+        'TMIN':'mean'
+    }).reset_index()
+
+    df_clima_rs.to_csv(dest_path + 'rs_final.csv', sep=';', decimal=',')
+    logger.info('-- Finished RS Climate data...')
+    
+
 
 def finalize_process(logger):
     logger.info('Finalizing process, deleting raw data...')
