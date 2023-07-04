@@ -196,7 +196,7 @@ def _exportacoes_top10_dol(df):
     grouped_df = df.groupby('Country').agg({'Sales (Dollars)': 'sum', 'Quantity (L)': 'sum'}).reset_index()
 
     # Sort the data by total sales in descending order
-    grouped_df = grouped_df.sort_values(by='Quantity (L)', ascending=False).head(10)
+    grouped_df = grouped_df.sort_values(by='Quantity (L)', ascending=False)
 
     # Create a figure with two y-axes
     fig = go.Figure()
@@ -222,19 +222,23 @@ def _exportacoes_top10_dol(df):
     return fig
 
 def _credito_top10(df):
-    df = df.query('metric=="domestic_credit_to_private_sector"').groupby('country').agg({'value':'sum'}).reset_index()
-
+    df = df.query('metric=="domestic_credit_to_private_sector"').groupby('country').agg({'value':'mean'}).reset_index()
+    df['value'] = [round(x, 2) for x in df['value']]
     df_top10 = df.sort_values(by='value', ascending=False).head(10)
 
     # Create a bar chart for the total quantity sold of the top 10 countries
     fig = px.bar(df_top10, x='country', y='value', text='value',
                 title='Top 10 Países com Maior Crédito para o Setor Privado',
-                labels={'value': 'Crédito Setor Privado'},
+                labels={'value': 'Crédito Setor Privado (Média da % do PIB)'},
                 template='plotly_dark')
 
     fig.update_yaxes(visible=True,
                     gridcolor='black',zeroline=True,
-                    showticklabels=True, title='Crédito Setor Privado',
+                    showticklabels=False, title='Crédito Setor Privado (Média da % do PIB)',
+                    )
+    
+    fig.update_xaxes(visible=True,
+                    gridcolor='black', title='Países',
                     )
     
     # Set layout properties
@@ -260,6 +264,9 @@ def _register_business_top10(df):
                     gridcolor='black',zeroline=True,
                     showticklabels=False, title='Nº de Procedimentos'
                     )
+    fig.update_xaxes(visible=True,
+                    gridcolor='black', title='Países',
+                    )
     # Set layout properties
     fig.update_layout(showlegend=False, 
                       xaxis={'categoryorder': 'total ascending'})
@@ -276,18 +283,26 @@ def _register_business_top10(df):
     return fig
 
 def _crescimento_pop_top10(df):
-    df = df.query('metric=="population_growth"').groupby('country').agg({'value':'sum'}).reset_index()
+    df = df.query('metric=="population_growth"')
+    df_max = df.groupby('country').agg({'year':'max'}).reset_index()#
+
+    df = df.merge(df_max, on=['country','year'], how='inner').groupby('country').agg({'value':'mean'}).reset_index()
 
     df_top10 = df.sort_values(by='value', ascending=False).head(10)
 
     # Create a bar chart for the total quantity sold of the top 10 countries
     fig = px.bar(df_top10, x='country', y='value',text='value',
-                title='Top 10 Países com Maior crescimento populacional',
+                title='''<b>Top 10 Países com Maior crescimento populacional médio*</b>
+                <br><sup>* Considerando-se o último ano na base</sup>
+                ''',
                 template='plotly_dark')
 
     fig.update_yaxes(visible=True,
                     gridcolor='black',zeroline=True,
                     showticklabels=False, title='Crescimento Populacional'
+                    )
+    fig.update_xaxes(visible=True,
+                    gridcolor='black', title='Países',
                     )
     # Set layout properties
     fig.update_layout(showlegend=False, 
@@ -454,7 +469,8 @@ def _wine_ratings(df):
 
         # Configurar o layout do gráfico atual
         fig.update_layout(
-            title=f'Top 5 - Média de Pontuação por País - Tipo: {tipo}',
+            title=f'''Top 5 - Média de Pontuação por País
+             <br><sup>Tipo: {tipo}</sup>''',
             xaxis=dict(title='País'),
             yaxis=dict(title='Pontuação Média'),
             barmode='group'
@@ -504,7 +520,8 @@ def _wine_ratings_opportunity(df):
 
         # Configurar o layout do gráfico atual
         fig.update_layout(
-            title=f'Top 5 - Média de Pontuação por País - Tipo: {tipo}',
+            title=f'''Top 5 - Média de Pontuação por País 
+            <br><sup>Tipo: {tipo}</sup>''',
             xaxis=dict(title='País'),
             yaxis=dict(title='Pontuação Média'),
             barmode='group'

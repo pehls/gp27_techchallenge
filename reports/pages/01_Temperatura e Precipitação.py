@@ -32,7 +32,9 @@ with st.expander("Mais detalhes"):
         - Para normalizar o dado por país, usamos a média dos valores das estatísticas colocadas, por ano, trazendo o dado diário para a configuração anual esperada para análise em conjunto com as exportações de vinhos do estado do RS.
         - Notamos ainda, que a temperatura estava armazenada em Farenheidt, realizando a transformação para celsius, e retirando valores que sejam inferiores a -90 graus celsius (menor temperatura já registrada no planeta, na Antártida), e maiores que 57 (maior temperatura já registrada, no Death Valley, Califórnia, USA)
         - Ao chegarmos na análise das variáveis, utilizamos um ranqueamento dos países, por ano, tendo como métrica o erro percentual absoluto médio com relação ao valor máximo, mínimo e médio da variável sendo analisada. Os países que tiverem as menores diferenças estarão com o menor erro percentual dessas três métricas (mínimo, máximo e médio) da variável climática, em cada ano. Após realizar esse ranqueamento, somamos os ranques de cada país, e ordenamos do menor para o maior, realizando um novo ranqueamento, e filtrando os países que estão dentro do top 3, para precipitação (podemos ter mais de um por posição!) e top 6 para as temperaturas;
-    """)
+    """,
+        icon="ℹ️"
+    )
 
 base_path = '..\\data\\processed'
 
@@ -48,8 +50,7 @@ with tab_precipitacao:
             ),'PRCP')
     , use_container_width=True)
 
-    with st.expander("Mais detalhes"):
-        st.info("""
+    st.write("""
             Ao compararmos a precipitação média, notamos uma maior presença de países da América do Sul, em uma faixa de clima muito parecida com a nossa, como Argentina, Venezuela e Equador.
             Nova Caledônia, Nova Zelândia e Ilhas Marshall estão em uma faixa muito parecida com o Rio Grande do Sul do mundo - tendo uma boa parte do clima com grandes semelhanças ao estado do Brasil.
             Malta se encontra em uma região de clima mais tropical, estando logo acima da África, na região central do Mediterrâneo, e também possui um clima ameno.
@@ -84,8 +85,7 @@ with tab_precipitacao:
             ),'PRCP')
         , use_container_width=True)
 
-    with st.expander("Mais detalhes"):
-        st.info("""
+    st.write("""
             Na análise da distribuição dos dados de precipitação, notamos o quão semelhante são os países da América do Sul novamente, com distribuições um pouco diversas, mas que refletem os pontos médios e máximos do RS, com concentrações em 
             60 (para Argentina), e entre 50 e 80 (para Venezuela e Equador). Os demais países estão em uma faixa mais baixa de precipitação média, com valores entre 15 e 30, sendo que o RS possui uma maior concentração em 20 e 40 mm, compreendendo tais faixas da mesma maneira.
 
@@ -95,8 +95,7 @@ with tab_precipitacao:
 
 with tab_temp_media:
 
-    with st.expander("Mais detalhes"):
-        st.info("""
+    st.write("""
             Novamente, ao analisarmos as Temperaturas Médias, encontramos as Ilhas Marshal, e um país da América do Sul, a Bolívia.
             Ainda, a presença da África do Sul, estando em uma faixa parecida com o RS no globo terrestre;
             A Áustria conta com estações bem definidas durante o ano, chegando a ter temperaturas perto de 30º C no verão, mas com invernos rigorosos em algumas regiões.
@@ -142,8 +141,7 @@ with tab_temp_media:
 
 with tab_temp_min:
     
-    with st.expander("Mais detalhes"):
-        st.info("""
+    st.write("""
             Chegando nas temperaturas mínimas, vemos países da América do sul, como Bolívia, Colômbia, Peru e Equador, dominando nas semelhanças; Muito embora, ao analisar as distribuições, Equador e Colômbia tem seus valores em faixas mais próximas de 0, uma faixa mais fácil de ser encontrada no RS. 
             Os demais países aparecem aqui, provavelmente, por suas temperaturas no decorrer dos anos terem mais se aproximado dos valores mínimos, na faixa entre 0 e 8ºC, mas não possuem uma distribuição tão parecida com o RS.
         """,
@@ -184,8 +182,7 @@ with tab_temp_min:
 
 with tab_temp_max:
 
-    with st.expander("Mais detalhes"):
-        st.info("""
+    st.write("""
            Chegando nas máximas, vemos a Austrália, vizinha da Nova Zelândia, com uma distribuição (inclusive) muito semelhante ao RS;
            Novamente, Itália e Áustria aparecem com pontos semelhantes ao RS, e Reino Unido e Suécia aparecem pela primeira vez, com faixas de temperatura entre 20 e 40 graus, trazendo alguma semelhança com a media geral por perto de 29ºC do RS.
         """,
