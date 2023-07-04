@@ -10,6 +10,7 @@ import time, datetime
 import pandas as pd
 import numpy as np
 import multiprocessing as mp
+import joblib
 
 os.environ['KAGGLE_USERNAME'] = config.KAGGLE_USERNAME  #manually input My_Kaggle User_Name 
 os.environ['KAGGLE_KEY'] = config.KAGGLE_KEY #
@@ -129,6 +130,10 @@ def process_tech_challenge(logger):
 
     df_final = df_exp.merge(df_prod_com, on='ano', how='outer')
 
+    # traduzir country code
+    dict_translates = joblib.load("data\\processed\\dict_translates.pkl")
+    df_final['country_code'] = [dict_translates[x].upper() for x in df_final.pais]
+
     df_final.to_csv('data//processed//tech_challenge//df_vinhos.csv',index=False, sep=';', decimal=',') # export data to share with the project group members
 
     logger.info('-- Finished tech challenge data...')
@@ -209,6 +214,21 @@ def process_year(file_year='2019'):
 def read_csv(args):
         return pd.read_csv(args, sep=';', decimal='.')
 
+def _adjust_temperature(row, var):
+    """
+    vamos transformar dados em farenheidt para celsius;
+    caso seja menor que -90 (menor temperatura ja encontrada no planeta, na antartida) 
+    ou maior que 57 (maior temp, na california (death valley, usa)), retorna np.nan
+    """
+    if (row['stat'] in ['TMAX','TMIN','TAVG']):
+        celsius = (row[var] - 32) * 5/9
+        if ((celsius > -90) & (celsius < 57)):
+            return celsius
+        else:
+            return np.nan
+    return row[var]
+
+
 def process_noaa_global(logger):
     base_path = 'data\\raw\\noaa_global'
     dest_path = 'data\\interim\\noaa_global'
@@ -243,10 +263,40 @@ def process_noaa_global(logger):
 
     df_stations = pd.read_csv(base_path+'df_stations.csv', sep=';', decimal=',').rename(columns={'id':'station_id'})
 
-    df_noaa = df_noaa.merge(df_stations)
+    df_noaa_global = df_noaa.merge(df_stations)
+
+    # traduzir latitude e longitude para country code
+    dict_latlong = joblib.load("data\\processed\\dict_latlong.pkl")
+
+    df_noaa_global['lat_long'] = [f"{x.latitude},{x.longitude}" for x in df_noaa_global.itertuples()]
+    df_noaa_global = df_noaa_global.loc[df_noaa_global['lat_long'].isin(list(dict_latlong.keys()))]
+    df_noaa_global = df_noaa_global.loc[df_noaa_global['stat'].isin(['TMAX','TMIN','TAVG','PRCP'])]
+    df_noaa_global = df_noaa_global.loc[df_noaa_global['year'] > 1970]
+    df_noaa_global['country_code'] = [dict_latlong[f"{x.latitude},{x.longitude}"].upper() for x in df_noaa_global.itertuples()]
+
+    # filtrar apenas country que esteja no df_vinhos
+    df_vinhos = pd.read_csv(r'data\\processed\\tech_challenge\\df_vinhos.csv', sep=';', decimal=',')
+    df_noaa_global = df_noaa_global.loc[df_noaa_global['country_code'].isin(list(df_vinhos.country_code.unique()))]
+    
+    # ajuste da temperatura
+    for col in ['value_min', 'value_mean', 'value_median','value_max']:
+        df_noaa_global[col] = df_noaa_global.apply(lambda row: _adjust_temperature(row, col), axis=1)
+        # imputar media no lugar do nan
+        df_noaa_global[col] = df_noaa_global[col].fillna(df_noaa_global.groupby(['year','stat','country_code'])[col].transform('mean'))
 
     df_noaa.to_csv(dest_path+'noaa_global.csv', index=False, sep=';', decimal=',')
 
+    df_noaa_global = df_noaa_global\
+        .groupby(['year','stat','country_code'])\
+        .agg({
+            'value_min':'min'
+            , 'value_mean':'mean'
+            , 'value_median':'median'
+            , 'value_max':'max'
+        })\
+        .reset_index()
+    df_noaa_global\
+        .to_csv(dest_path+'noaa_global_final.csv', index=False, sep=';', decimal=',')
     logger.info('-- Finished NOAA global data...')
 
 def process_wbpy(logger):
