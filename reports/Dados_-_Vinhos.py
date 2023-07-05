@@ -22,6 +22,7 @@ with st.sidebar.expander("Selecionar time frame"):
     
 st.write("""
 # Tech Challenge #01 - Grupo 27 - Análise de Oportunidades / Vinícolas
+by. Eduardo Gomes, Igor Brito e Gabriel Pehls
 """)     
 
 with st.expander("Mais detalhes"):
