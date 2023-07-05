@@ -58,8 +58,7 @@ with tab_precipitacao:
             A Polônia estaria no limite de semelhança, tendo o clima temperado, com um verão bem quente e curto, e um inverno longo e frio. obtendo médias mais baixas por ano, sendo semelhante a Finlândia e Malta.
 
             
-        """,
-        icon="ℹ️")
+        """)
     st.divider() # ------------------------------------------------------
     col1, col2 = st.columns([1,3])
     with col1:
@@ -90,8 +89,7 @@ with tab_precipitacao:
             60 (para Argentina), e entre 50 e 80 (para Venezuela e Equador). Os demais países estão em uma faixa mais baixa de precipitação média, com valores entre 15 e 30, sendo que o RS possui uma maior concentração em 20 e 40 mm, compreendendo tais faixas da mesma maneira.
 
             No quesito precipitação, todos os países mencionados parecem fazer sentido como sendo boas escolhas, levando em consideração que o clima, a sensação térmica e a temperatura são altamente influenciados pela mesma, e quem não gosta de um vinho no friozinho!
-        """,
-        icon="ℹ️")
+        """)
 
 with tab_temp_media:
 
@@ -102,8 +100,7 @@ with tab_temp_media:
             A Itália, conforme vemos abaixo, tem uma média de temperatura anual muito parecida com o RS - será por isso que temos uma grande presença de imigrantes italianos, e uma grande produção de vinhos na região do RS? Será que seria um bom país para oferecermos e aumentarmos a nossa presença, com vinhos de qualidade?
             Aqui, Hong Kong aparece também com muita semelhança com o clima do RS, tendo em vista que também possui clima subtropical, e a República Tcheca, que possui um clima temperado, com estações do ano bem definidas, mas um verão menos ameno, e invernos com uma constância de temperaturas abaixo de zero; Novamente, uma grande oportunidade pra apresentar vinhos mais quentes e secos!
             
-        """,
-        icon="ℹ️")
+        """)
 
     st.plotly_chart(
     generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
@@ -144,8 +141,7 @@ with tab_temp_min:
     st.write("""
             Chegando nas temperaturas mínimas, vemos países da América do sul, como Bolívia, Colômbia, Peru e Equador, dominando nas semelhanças; Muito embora, ao analisar as distribuições, Equador e Colômbia tem seus valores em faixas mais próximas de 0, uma faixa mais fácil de ser encontrada no RS. 
             Os demais países aparecem aqui, provavelmente, por suas temperaturas no decorrer dos anos terem mais se aproximado dos valores mínimos, na faixa entre 0 e 8ºC, mas não possuem uma distribuição tão parecida com o RS.
-        """,
-        icon="ℹ️")
+        """)
 
     st.plotly_chart(
     generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(
@@ -185,8 +181,7 @@ with tab_temp_max:
     st.write("""
            Chegando nas máximas, vemos a Austrália, vizinha da Nova Zelândia, com uma distribuição (inclusive) muito semelhante ao RS;
            Novamente, Itália e Áustria aparecem com pontos semelhantes ao RS, e Reino Unido e Suécia aparecem pela primeira vez, com faixas de temperatura entre 20 e 40 graus, trazendo alguma semelhança com a media geral por perto de 29ºC do RS.
-        """,
-        icon="ℹ️")
+        """)
 
     st.plotly_chart(
     generate_graphs._metricas_noaa(get_data.DF_PRECP_COMPARATIVE(

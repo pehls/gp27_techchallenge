@@ -21,7 +21,8 @@ with st.sidebar.expander("Selecionar time frame"):
         step=1, min_value=1, max_value=(date.today().year - 1970))[0]
     
 st.write("""
-# Tech Challenge #01 - Grupo 27 - Análise de Oportunidades / Vinícolas
+# Tech Challenge #01 - Grupo 27 
+## Análise de Oportunidades / Vinícolas
 by. Eduardo Gomes, Igor Brito e Gabriel Pehls
 """)     
 
